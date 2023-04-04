@@ -1,8 +1,9 @@
-import { HttpCode, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Body, HttpCode, HttpException, HttpStatus, Injectable, NotFoundException, Post, UnauthorizedException } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from 'bcrypt'
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
+import { signInDTO } from "./dto/auth.dto";
 
 
 @Injectable()
@@ -17,12 +18,24 @@ export class AuthService {
         if(!user) throw new NotFoundException()
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) throw new UnauthorizedException()
+        return !!user && isMatch ? user:null
                                 
     }   
     async signUp(user: CreateUserDto) {
         const existingEmail = await this.userService.findByEmail(user.email);
-        if (!!existingEmail === true) throw new HttpException('Email já existe', HttpStatus.BAD_REQUEST)
-        
-        
+        if (!!existingEmail === true) 
+        throw new HttpException('Email já existe', HttpStatus.BAD_REQUEST)
+
+        return await this.userService.create(user)
+          
     }    
+    async signIn(data: signInDTO) {
+        const user = await this.validateUser(data)
+        const payload = {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        }             
+      return { user, token: this.jwtService.sign(payload)};
+    }
 }

@@ -6,7 +6,7 @@ import { CreateUserDto } from "./dto/create-user.dto"
 import { ListUserDto } from "./dto/list-user.dto"
 import { User } from "./entities/user.entities"
 import { UserService } from "./user.service"
-import { JwtAuthGuard } from "src/auth/auth.guard"
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard"
 
 
 @UseGuards(JwtAuthGuard)
