@@ -28,14 +28,6 @@ export class AuthService {
 
         return await this.userService.create(user)
           
-    }    
-    async signIn(data: signInDTO) {
-        const user = await this.validateUser(data)
-        const payload = {
-          id: user.id,
-          name: user.name,
-          email: user.email
-        }             
-      return { user, token: this.jwtService.sign(payload)};
-    }
+    }     
+        
 }

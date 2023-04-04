@@ -6,7 +6,7 @@ import { signInDTO } from "src/auth/dto/auth.dto";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
 
 @ApiTags('account')
-@Controller('/')
+@Controller('account')
 export class AccountController {
   constructor(
     private readonly authService: AuthService,
@@ -14,13 +14,19 @@ export class AccountController {
   ) { }
    
     @Post('signup')
-    signUp(@Body() body: CreateUserDto) {
-      return this.authService.signUp(body)
-    }
+    async signUp(@Body() body: CreateUserDto) {
+      return await this.authService.signUp(body)
+    }     
+
     @Post('signin')   
-    signIn(@Body() body: signInDTO) {
-      return this.authService.signIn(body)
+    async signIn(@Body() body: signInDTO) {
+      const user = await this.authService.validateUser(body)
+      const payload = {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      }             
+      return { user, token: this.jwtService.sign(payload)};
     }
-   
-          
+             
 }

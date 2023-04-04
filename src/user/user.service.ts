@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entities';
 import * as bcrypt from 'bcrypt'
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -21,14 +22,24 @@ export class UserService {
             const response = this.findOne(newUser._id.toString());
             return response           
 
-        } catch (error) {}
+        } catch (error) {
+            console.log(error, 'error')
+        }
     }   
 
     async getAll() {
-        return await this.userModel.find().exec();
+        try {
+            return await this.userModel
+            .find()
+            .populate('profession')
+            .exec()
+        } catch (error) { 
+            return error
+        }
     }
+        
 
-    async getById(id: number) {
+    async getById(id: string) {
         return await this.userModel.findById(id).exec();
     }
 
@@ -38,8 +49,11 @@ export class UserService {
             .findOne({
                 email: email,
             })
+            .populate('Profession')
             .exec()
-        } catch (error) {}
+        } catch (error) {
+            return error
+        }
         
     }
 
@@ -47,9 +61,30 @@ export class UserService {
         try {
             return await this.userModel
                 .findById(id)  
+                .populate('Profession')
                 .exec()              
-        } catch (error) { }
+        } catch (error) { 
+            return error
+        }
     }
 
-    
+    async update(id: string, data: UpdateUserDto) {
+        try {
+            return await this.userModel
+            .findByIdAndUpdate(id, data)
+            .exec()
+        } catch (error) {
+            return error
+        }
+    }
+
+    async delete(id: string) {
+        try {
+            return await this.userModel
+            .findByIdAndRemove(id)
+            .exec()
+        } catch (error) {
+            return error
+        }
+    }    
 }

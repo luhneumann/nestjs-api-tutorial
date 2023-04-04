@@ -1,14 +1,15 @@
 import { Controller, Get, Post } from "@nestjs/common"
-import { Body, UseGuards } from "@nestjs/common/decorators"
+import { Body, Delete, Param, Put, UseGuards } from "@nestjs/common/decorators"
 import { ApiResponse } from "@nestjs/swagger"
-import { ApiOperation } from "@nestjs/swagger/dist"
+import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger/dist"
 import { CreateUserDto } from "./dto/create-user.dto"
 import { ListUserDto } from "./dto/list-user.dto"
 import { User } from "./entities/user.entities"
 import { UserService } from "./user.service"
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard"
+import { UpdateUserDto } from "./dto/update-user.dto"
 
-
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController{    
@@ -26,13 +27,79 @@ export class UserController{
         description: 'Retorna uma mensagem de erro sobre os dados enviados'
     })
     @ApiOperation({ summary: 'Usuário - cria um Usuário'})
-    create(@Body() createUserDto: CreateUserDto) {
-        return this.UserService.create(createUserDto)
+    async create(@Body() createUserDto: CreateUserDto) {
+        return await this.UserService.create(createUserDto)
     }
 
     @Get()
-    async getAll() : Promise<User[]> {
-        return this.UserService.getAll()
+    @ApiResponse({
+        status: 200,
+        description: 'Retorna todos objetos.',
+        type: ListUserDto,
+        isArray: true,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Retorna uma mensagem de erro sobre os dados enviados'
+    })
+    @ApiOperation({
+        summary: 'Usuário - lista todos usuários'
+    })
+    async getAll() {
+        return await this.UserService.getAll()
+    }
+
+    @Get(':id')
+    @ApiResponse({
+        status: 200,
+        description: 'Retorna um objeto', 
+        type: ListUserDto,       
+        isArray: false,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Retorna uma mensagem de erro sobre os dados enviados'
+    })
+    @ApiOperation({ summary: 'Usuário - retorna um usuário'})
+    async getById(@Param('id') id: string) {
+        return await this.UserService.getById(id)
     }
     
+
+    @Put(':id')
+    @ApiResponse({
+        status: 200,
+        description: 'Edita um usuário', 
+        type: ListUserDto,       
+        isArray: false,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Retorna uma mensagem de erro sobre os dados enviados'
+    })
+    @ApiOperation({summary: 'Usuário - edita um usuário'})
+    async update(
+        @Param('id') id: string,
+        @Body() data: UpdateUserDto
+    ) {
+        return await this.UserService.update(id, data)
+    }
+
+    @Delete(':id')
+    @ApiResponse({
+        status: 200,
+        description: 'Remove um usuário', 
+        type: UpdateUserDto,       
+        isArray: false,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Retorna uma mensagem de erro sobre os dados enviados'
+    })
+    @ApiOperation({ summary: 'Usuário - remove um usuário'})
+    async remove(
+        @Param('id') id: string
+    ){
+        return await this.UserService.delete(id)
+    }
 }
