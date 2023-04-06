@@ -1,5 +1,5 @@
 import { MongooseModule } from "@nestjs/mongoose";
-import { StateSchema, States } from "./entities/states.entities";
+import { StateSchema, State } from "./entities/states.entities";
 import { StatesService } from "./states.service";
 import { StatesController } from "./states.controller";
 import { Module } from "@nestjs/common";
@@ -8,7 +8,7 @@ import { Module } from "@nestjs/common";
     imports:[
         MongooseModule.forFeature([
             {
-                name: States.name,
+                name: State.name,
                 schema: StateSchema
             }
             

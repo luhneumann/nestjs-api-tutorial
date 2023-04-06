@@ -1,7 +1,7 @@
 import { Controller, Get, Post } from "@nestjs/common"
 import { Body, Delete, Param, Put, UseGuards } from "@nestjs/common/decorators"
 import { ApiResponse } from "@nestjs/swagger"
-import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger/dist"
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger/dist"
 import { CreateUserDto } from "./dto/create-user.dto"
 import { ListUserDto } from "./dto/list-user.dto"
 import { User } from "./entities/user.entities"
@@ -11,6 +11,7 @@ import { UpdateUserDto } from "./dto/update-user.dto"
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
+@ApiTags('user')
 @Controller('user')
 export class UserController{    
     constructor(private readonly UserService: UserService) {}    
@@ -19,7 +20,7 @@ export class UserController{
     @ApiResponse({
         status: 200,
         description: 'Retorna objeto criado', 
-        type: ListUserDto,       
+        type: CreateUserDto,       
         isArray: false,
     })
     @ApiResponse({
@@ -62,9 +63,8 @@ export class UserController{
     })
     @ApiOperation({ summary: 'Usuário - retorna um usuário'})
     async getById(@Param('id') id: string) {
-        return await this.UserService.getById(id)
-    }
-    
+        return await this.UserService.findOne(id)
+    }    
 
     @Put(':id')
     @ApiResponse({

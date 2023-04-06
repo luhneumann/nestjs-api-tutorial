@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { InjectModel } from "@nestjs/mongoose"
-import { Cities } from "./entities/cities.entities"
+import { City } from "./entities/cities.entities"
 import { Model } from "mongoose"
 import { CreateCityDto } from "./dto/create-city.dto"
 import { UpdateCityDto } from "./dto/update-city.dto"
@@ -8,18 +8,18 @@ import { UpdateCityDto } from "./dto/update-city.dto"
 @Injectable()
 export class CitiesService {
     constructor(
-        @InjectModel(Cities.name) private citiesModel: Model<Cities>) { }
+        @InjectModel(City.name) private citiesModel: Model<City>) { }
 
     async create(data: CreateCityDto) {
         try {
             const newCity = await new this.citiesModel(
                 data,
-            )
-                .save()
+            ).save()
             return newCity
 
         } catch (error) {
-            return error
+            console.log(error)
+            return null
         }
     }
 

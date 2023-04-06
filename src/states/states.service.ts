@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { States } from "./entities/states.entities";
+import { State } from "./entities/states.entities";
 import { Model } from "mongoose";
 import { CreateStateDto } from "./dto/create-state.dto";
 import { UpdateStatesDto } from "./dto/update-state.dto";
@@ -8,7 +8,7 @@ import { UpdateStatesDto } from "./dto/update-state.dto";
 @Injectable()
 export class StatesService {
     constructor(
-        @InjectModel(States.name) private statesModel: Model<States>) { }
+        @InjectModel(State.name) private statesModel: Model<State>) { }
 
     async create(data: CreateStateDto) {
         try {

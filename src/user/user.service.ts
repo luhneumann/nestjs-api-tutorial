@@ -24,35 +24,37 @@ export class UserService {
 
         } catch (error) {
             console.log(error, 'error')
+            return null
         }
     }   
 
     async getAll() {
         try {
             return await this.userModel
-            .find()
-            .populate('profession')
+            .find()          
+            .populate('city')
+            .populate('state')
+            .populate('farm')
             .exec()
         } catch (error) { 
-            return error
+            console.log(error)
         }
-    }
-        
+    }      
 
-    async getById(id: string) {
-        return await this.userModel.findById(id).exec();
-    }
+    
 
     async findByEmail(email: string) {
         try{
             return await this.userModel
             .findOne({
                 email: email,
-            })
-            .populate('Profession')
+            })            
+            .populate('city')
+            .populate('state')
+            .populate('farm')
             .exec()
         } catch (error) {
-            return error
+            console.log(error)
         }
         
     }
@@ -60,11 +62,13 @@ export class UserService {
     async findOne(id: string) {
         try {
             return await this.userModel
-                .findById(id)  
-                .populate('Profession')
+                .findById(id)                  
+                .populate('city')
+                .populate('state')
+                .populate('farm')
                 .exec()              
         } catch (error) { 
-            return error
+            console.log(error)
         }
     }
 
@@ -74,7 +78,7 @@ export class UserService {
             .findByIdAndUpdate(id, data)
             .exec()
         } catch (error) {
-            return error
+            console.log(error)
         }
     }
 
@@ -84,7 +88,7 @@ export class UserService {
             .findByIdAndRemove(id)
             .exec()
         } catch (error) {
-            return error
+            console.log(error)
         }
     }    
 }

@@ -8,10 +8,16 @@ import { ProfessionsModule } from './professions/professions.module';
 import { AnimalsModule } from './animals/animals.module';
 import { CitiesModule } from './cities/cities.module';
 import { StatesModule } from './states/states.module';
+import { LotsModule } from './lots/lots.module';
+import { FarmsModule } from './farm/farms.module';
+import { ManagementsModule } from './managements/managements.module';
+import { WeightControlModule } from './weight-control/weight-control.module';
+import { VaccinationModule } from './vaccination/vaccination.module';
 
 
 @Module({
-  imports: [ 
+  imports: [     
+    FarmsModule,
     CitiesModule,
     StatesModule,    
     ProfessionsModule,
@@ -19,9 +25,13 @@ import { StatesModule } from './states/states.module';
     UserModule,    
     AccountModule,
     MongooseModule.forRoot('mongodb+srv://luanafneumann22:181500@cluster0.lun8ojy.mongodb.net/?retryWrites=true&w=majority'),
-    AnimalsModule
+    AnimalsModule,
+    LotsModule,
+    ManagementsModule,
+    WeightControlModule,
+    VaccinationModule
   ],  
-   controllers: [AppController],
+   controllers: [],
    providers:[]
 })
 export class AppModule {}

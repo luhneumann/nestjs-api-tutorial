@@ -5,5 +5,5 @@ export class CreateProfessionDto {
         type: String,
         required: true
     })
-    name: string
+    profession: string
 }

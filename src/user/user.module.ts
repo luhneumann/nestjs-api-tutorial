@@ -13,10 +13,10 @@ import { ProfessionsModule } from 'src/professions/professions.module';
             schema: UserSchema
         },
     ]), 
-        ProfessionsModule    
+        ProfessionsModule,            
     ],
     controllers: [UserController],
     providers: [UserService],
-    exports:[UserService]
+    exports:[UserService, UserModule]
 })
 export class UserModule {}

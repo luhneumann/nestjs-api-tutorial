@@ -2,9 +2,12 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
 @Schema({versionKey: false})
-export class States extends Document {
+export class State extends Document {
+    @Prop({ type: String, required: true})
+    abbreviation: string
+
     @Prop({type: String})
-    state: string
+    name: string
 }
 
-export const StateSchema = SchemaFactory.createForClass(States)
+export const StateSchema = SchemaFactory.createForClass(State)
