@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document } from "mongoose";
 import { Animal } from "src/animals/entities/animal.entity";
 import { Management } from "src/managements/entities/management.entity";
@@ -25,3 +25,4 @@ export class Event extends Document {
     @Prop({ type: String, required: false})
     observation: string
 }
+export const EventSchema = SchemaFactory.createForClass(Event)
