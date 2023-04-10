@@ -13,6 +13,7 @@ import { FarmsModule } from './farm/farms.module';
 import { ManagementsModule } from './managements/managements.module';
 import { WeightControlModule } from './weight-control/weight-control.module';
 import { VaccinationModule } from './vaccination/vaccination.module';
+import { DewormingModule } from './deworming/deworming.module';
 
 
 @Module({
@@ -29,7 +30,8 @@ import { VaccinationModule } from './vaccination/vaccination.module';
     LotsModule,
     ManagementsModule,
     WeightControlModule,
-    VaccinationModule
+    VaccinationModule,
+    DewormingModule
   ],  
    controllers: [],
    providers:[]
