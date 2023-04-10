@@ -1,34 +1,91 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { MedicinesService } from './medicines.service';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ListMedicineDto } from './dto/list-medicine.dto';
 
+@ApiTags('medicines')
 @Controller('medicines')
 export class MedicinesController {
   constructor(private readonly medicinesService: MedicinesService) {}
 
   @Post()
-  create(@Body() createMedicineDto: CreateMedicineDto) {
-    return this.medicinesService.create(createMedicineDto);
+  @ApiResponse({
+    status: 200,
+    description: 'Cria um objeto',
+    type: CreateMedicineDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Medicine - Cria um novo registro de administração de medicamento'})
+  async create(@Body() createMedicineDto: CreateMedicineDto) {
+    return await this.medicinesService.create(createMedicineDto);
   }
 
   @Get()
-  findAll() {
-    return this.medicinesService.findAll();
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    type: ListMedicineDto,
+    isArray: true
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Medicine - Retorna uma lista de registros de administração de medicamentos'})
+  async findAll() {
+    return await this.medicinesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.medicinesService.findOne(+id);
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListMedicineDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Medicine - Retorna um registro de administração de medicamento'})
+  async findOne(@Param('id') id: string) {
+    return await this.medicinesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMedicineDto: UpdateMedicineDto) {
-    return this.medicinesService.update(+id, updateMedicineDto);
+  @Put(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Edita um objeto',
+    type: UpdateMedicineDto    
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Medicine - Edita um registro de administração de medicamento'})
+  async update(@Param('id') id: string, @Body() updateMedicineDto: UpdateMedicineDto) {
+    return await this.medicinesService.update(id, updateMedicineDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.medicinesService.remove(+id);
+  @ApiResponse({
+    status: 200,
+    description: 'Deleta um objeto',
+    type: UpdateMedicineDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Medicine - Remove o registro de administração de medicamento'})
+  async remove(@Param('id') id: string) {
+    return await this.medicinesService.remove(id);
   }
 }
