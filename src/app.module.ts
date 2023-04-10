@@ -14,6 +14,7 @@ import { ManagementsModule } from './managements/managements.module';
 import { WeightControlModule } from './weight-control/weight-control.module';
 import { VaccinationModule } from './vaccination/vaccination.module';
 import { DewormingModule } from './deworming/deworming.module';
+import { EventsModule } from './events/events.module';
 
 
 @Module({
@@ -31,7 +32,8 @@ import { DewormingModule } from './deworming/deworming.module';
     ManagementsModule,
     WeightControlModule,
     VaccinationModule,
-    DewormingModule
+    DewormingModule,
+    EventsModule
   ],  
    controllers: [],
    providers:[]
