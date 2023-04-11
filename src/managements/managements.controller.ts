@@ -59,6 +59,22 @@ export class ManagementsController {
     return await this.managementsService.findOne(id);
   }
 
+  @Get('/all/:management_id')
+  @ApiResponse({
+    status: 200,
+    description:'Lista um objeto',
+    type: ListManagementDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description:'Retorna uma mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({ summary: 'Managements - Lista o detalhamento dos itens do manejo'})
+  async findAllChanges(@Param('management_id') management_id: string) {
+    return await this.managementsService.findEachChangesOfManagements(management_id);
+  }
+
   @Put(':id')
   @ApiResponse({
     status: 200,

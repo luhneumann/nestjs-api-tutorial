@@ -14,6 +14,7 @@ import { WeightControl, WeightControlSchema } from './entities/weight-control.en
     ])
   ],
   controllers: [WeightControlController],
-  providers: [WeightControlService, WeightControlModule]
+  providers: [WeightControlService],
+  exports:[WeightControlService, WeightControlModule]
 })
 export class WeightControlModule {}

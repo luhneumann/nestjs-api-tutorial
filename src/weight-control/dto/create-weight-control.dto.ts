@@ -14,7 +14,7 @@ export class CreateWeightControlDto {
     date: Date
 
     @ApiProperty({ type: String, required: false})
-    management: Management
+    management_id: Management
 
     @ApiProperty({ type: String, required: false})
     animal_weight: string  

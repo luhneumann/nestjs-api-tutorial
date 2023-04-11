@@ -7,13 +7,13 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class MedicinesService {
-  constructor(@InjectModel(Medicine.name) private readonly medicineModel: Model<Medicine>){}
+  constructor(@InjectModel(Medicine.name) private medicineModel: Model<Medicine>){}
 
   async create(createMedicineDto: CreateMedicineDto) {
     try {
       const newMedicine = await new this.medicineModel(createMedicineDto)
       .save()
-      return await newMedicine
+      return newMedicine
     } catch (error) {
       console.log(error)
     }    
@@ -35,6 +35,16 @@ export class MedicinesService {
     } catch(error){
       console.log(error)
     }     
+  }
+
+  async findManagementId(management_id: string){
+    try {
+      const conditions = {management_id: management_id}
+      const managementId = await this.medicineModel.findOne(conditions).exec()
+      return managementId
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async update(id: string, updateMedicineDto: UpdateMedicineDto) {

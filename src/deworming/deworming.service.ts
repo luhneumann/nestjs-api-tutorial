@@ -6,12 +6,12 @@ import { Deworming } from './entities/deworming.entity';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class DewormingService {
-  constructor(@InjectModel(Deworming.name) private readonly dewormingService: Model<Deworming>){}
+export class DewormingService {  
+  constructor(@InjectModel(Deworming.name) private readonly dewormingModel: Model<Deworming>){}
 
   async create(createDewormingDto: CreateDewormingDto) {
     try {
-      const newDeworming = new this.dewormingService(createDewormingDto)
+      const newDeworming = new this.dewormingModel(createDewormingDto)
       .save()
       return await newDeworming
     } catch (error) {
@@ -21,7 +21,7 @@ export class DewormingService {
 
   async findAll() {
     try {
-      return await this.dewormingService
+      return await this.dewormingModel
       .find()
       .exec()
     } catch (error) {
@@ -31,7 +31,7 @@ export class DewormingService {
 
   async findOne(id: string) {
     try{
-      return await this.dewormingService
+      return await this.dewormingModel
       .findById(id)
       .exec()
     } catch (error){
@@ -39,10 +39,20 @@ export class DewormingService {
     }    
   }
 
+  async findManagementId(management_id: string){
+    try {
+      const conditions = {management_id: management_id}
+      const managementId = await this.dewormingModel.findOne(conditions).exec()
+      return managementId
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async update(id: string, updateDewormingDto: UpdateDewormingDto) {
     try {
 
-      const updateDeworming = await this.dewormingService
+      const updateDeworming = await this.dewormingModel
       .findByIdAndUpdate({_id: id}, updateDewormingDto)
       .exec()
       return updateDeworming
@@ -54,7 +64,7 @@ export class DewormingService {
 
   async remove(id: string) {
     try {
-      return await this.dewormingService
+      return await this.dewormingModel
       .findByIdAndDelete(id)
       .exec()
     } catch (error) {

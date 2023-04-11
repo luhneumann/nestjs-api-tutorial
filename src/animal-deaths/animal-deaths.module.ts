@@ -14,6 +14,7 @@ import { AnimalDeath, AnimalDeathSchema } from './entities/animal-death.entity';
     ])
   ],
   controllers: [AnimalDeathsController],
-  providers: [AnimalDeathsService]
+  providers: [AnimalDeathsService],
+  exports: [AnimalDeathsService, AnimalDeathsModule]
 })
 export class AnimalDeathsModule {}

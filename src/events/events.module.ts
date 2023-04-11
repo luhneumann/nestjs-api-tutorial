@@ -15,6 +15,7 @@ import { EventSchema } from './entities/event.entity';
     ])
   ],
   controllers: [EventsController],
-  providers: [EventsService]
+  providers: [EventsService],
+  exports: [EventsService, EventsModule]
 })
 export class EventsModule {}

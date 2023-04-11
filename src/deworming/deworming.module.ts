@@ -14,6 +14,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     ])
   ],
   controllers: [DewormingController],
-  providers: [DewormingService]
+  providers: [DewormingService],
+  exports:[DewormingService, DewormingModule]
 })
 export class DewormingModule {}

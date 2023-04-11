@@ -10,7 +10,7 @@ export class Disease extends Document{
     user: User
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Management.name , required: false})
-    management: Management
+    management_id: Management
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Animal.name , required: false})
     animal: Animal

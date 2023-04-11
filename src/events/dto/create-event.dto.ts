@@ -17,7 +17,10 @@ export class CreateEventDto {
     date: Date
 
     @ApiProperty({ type: String, required: false})
-    disease: string
+    diseases: string
+
+    @ApiProperty({ type: String, required: false})
+    deaths: String
 
     @ApiProperty({ type: String, required: false})
     observation: string

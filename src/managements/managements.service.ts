@@ -4,11 +4,20 @@ import { UpdateManagementDto } from './dto/update-management.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Management } from './entities/management.entity';
 import { Model } from 'mongoose';
-import { WeightControl } from 'src/weight-control/entities/weight-control.entity';
+import { MedicinesService } from 'src/medicines/medicines.service';
+import { EventsService } from 'src/events/events.service';
+import { DewormingService } from 'src/deworming/deworming.service';
+import { WeightControlService } from 'src/weight-control/weight-control.service';
+import { VaccinationService } from 'src/vaccination/vaccination.service';
 
 @Injectable()
 export class ManagementsService {
-  constructor(@InjectModel(Management.name) private readonly managementModel: Model<Management>) { }
+  constructor(@InjectModel(Management.name) private managementModel: Model<Management>,
+  public  medicinesService: MedicinesService,
+  public  eventsService: EventsService,
+  public  dewormingService: DewormingService,
+  public  weightControlService: WeightControlService,
+  public  vaccinationService: VaccinationService) { }
 
   async create(createManagementDto: CreateManagementDto) {
     try {
@@ -24,13 +33,7 @@ export class ManagementsService {
   async findAll() {
     try {
       return await this.managementModel
-      .find()
-      .populate('medicines')
-      .populate('events')
-      .populate('deworming')
-      .populate('vaccination')
-      .populate('animal_deaths')
-      .populate('weight_control')
+      .find()      
       .exec()
     } catch (error) {
       console.log(error)
@@ -40,18 +43,32 @@ export class ManagementsService {
   async findOne(id: string) {
     try {
       return await this.managementModel
-      .findById(id)
-      .populate('medicines')
-      .populate('events')
-      .populate('deworming')
-      .populate('vaccination')
-      .populate('animal_deaths')
-      .populate('weight_control')
+      .findById(id)     
       .exec()
     } catch (error) {
       console.log(error)
     }    
   }
+
+  async findEachChangesOfManagements(id: string){
+    try {      
+      const medicines = await this.medicinesService.findManagementId(id)      
+      const vaccination = await this.vaccinationService.findManagementId(id)      
+      const deworming = await this.dewormingService.findManagementId(id)      
+      const events = await this.eventsService.findManagementId(id)      
+      const weight_control = await this.weightControlService.findManagementId(id)                
+      return {
+        medicines,
+        vaccination,
+        deworming,
+        events,
+        weight_control
+      }      
+    } catch (error) {
+      console.log()
+    }
+  }
+  
 
   async update(id: string, updateManagementDto: UpdateManagementDto) {
     try{

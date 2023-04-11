@@ -36,6 +36,16 @@ export class EventsService {
     }    
   }
 
+  async findManagementId(management_id: string){
+    try {
+      const conditions = {management_id: management_id}
+      const managementId = await this.eventModel.findOne(conditions).exec()
+      return managementId
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async update(id: string, updateEventDto: UpdateEventDto) {
     try{
       return await this.eventModel

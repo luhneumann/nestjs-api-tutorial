@@ -56,7 +56,7 @@ export class MedicinesController {
   @ApiOperation({ summary: 'Medicine - Retorna um registro de administração de medicamento'})
   async findOne(@Param('id') id: string) {
     return await this.medicinesService.findOne(id);
-  }
+  }  
 
   @Put(':id')
   @ApiResponse({

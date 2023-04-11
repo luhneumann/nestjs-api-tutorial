@@ -31,7 +31,7 @@ export class Deworming extends Document{
     dose: string
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Management.name, required: false})
-    management: Management   
+    management_id: Management   
 
 }
 export const DewormingSchema = SchemaFactory.createForClass(Deworming)

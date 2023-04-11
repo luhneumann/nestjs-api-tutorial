@@ -32,6 +32,16 @@ export class VaccinationService {
     }   
   }
 
+  async findManagementId(management_id: string){
+    try {
+      const conditions = {management_id: management_id}
+      const managementId = await this.vaccinationModel.find(conditions).exec()
+      return managementId
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async findOne(id: string) {
     try {
       return await this.vaccinationModel

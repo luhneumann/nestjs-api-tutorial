@@ -19,22 +19,22 @@ export class Management extends Document {
     @Prop({ type: Date, required: false})
     date: Date
 
-    @Prop({ type: String, required: false, default: null})
+    @Prop({ type: String, required: false})
     medicines: string
 
-    @Prop({ type: String, required: false, default: null})
+    @Prop({ type: String, required: false})
     events: string
 
-    @Prop({ type: String, required: false, default: null})
+    @Prop({ type: String, required: false})
     deworming: string
 
-    @Prop({ type: String, required: false, default: null})
+    @Prop({ type: String, required: false})
     animal_deaths: string
 
-    @Prop({ type: String, required: false, default: null})
+    @Prop({ type: String, required: false})
     vaccination: string
 
-    @Prop({ type: String, required: false, default: null})
+    @Prop({ type: String, required: false})
     weight_control: string
     
 }

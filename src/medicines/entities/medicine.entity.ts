@@ -17,7 +17,7 @@ export class Medicine extends Document {
     animal: Animal
 
     @Prop({type: mongoose.Schema.Types.ObjectId, ref:Management.name, required: false})
-    management: Management
+    management_id: Management
 
     @Prop({type: String, required: false})
     category: string

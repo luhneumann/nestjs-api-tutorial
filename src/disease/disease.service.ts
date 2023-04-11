@@ -1,26 +1,59 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDiseaseDto } from './dto/create-disease.dto';
 import { UpdateDiseaseDto } from './dto/update-disease.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Disease } from './entities/disease.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
-export class DiseaseService {
-  create(createDiseaseDto: CreateDiseaseDto) {
-    return 'This action adds a new disease';
+export class DiseasesService {
+  constructor(@InjectModel(Disease.name) private readonly diseaseModel: Model<Disease>){}
+
+  async create(createDiseaseDto: CreateDiseaseDto) {
+    try {
+      const newDisease = await new this.diseaseModel(createDiseaseDto)
+      .save()
+      return newDisease
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  findAll() {
-    return `This action returns all disease`;
+  async findAll() {
+    try {
+      return await this.diseaseModel.find().exec()
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} disease`;
+  async findOne(id: string) {
+    try {
+      return await this.diseaseModel
+      .findById(id)
+      .exec()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  update(id: number, updateDiseaseDto: UpdateDiseaseDto) {
-    return `This action updates a #${id} disease`;
+  async update(id: string, updateDiseaseDto: UpdateDiseaseDto) {
+    try {
+      return await this.diseaseModel
+      .findByIdAndUpdate({_id:id}, updateDiseaseDto)
+      .exec()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} disease`;
+  async remove(id: string) {
+    try {
+      return await this.diseaseModel
+      .findByIdAndRemove(id)
+      .exec() 
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

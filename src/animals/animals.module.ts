@@ -10,8 +10,7 @@ import { Animal, AnimalSchema } from './entities/animal.entity';
       {
           name: Animal.name,
           schema: AnimalSchema
-      }
-      
+      }      
   ])
   ],
   controllers: [AnimalsController],

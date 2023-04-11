@@ -39,6 +39,16 @@ export class WeightControlService {
     }
   }
 
+  async findManagementId(management_id: string){
+    try {
+      const conditions = {management_id: management_id}
+      const managementId = await this.weightControlModel.findOne(conditions).exec()
+      return managementId
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async update(id: string, updateWeightControlDto: UpdateWeightControlDto) {
     try {
       const updateWeightControl = await this.weightControlModel

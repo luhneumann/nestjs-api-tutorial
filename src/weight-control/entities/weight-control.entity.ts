@@ -19,7 +19,7 @@ export class WeightControl extends Document {
     date: Date   
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Management.name, required: false})
-    management: Management    
+    management_id: Management    
 
     @Prop({ type: String, required: false})
     animal_weight: string[]          

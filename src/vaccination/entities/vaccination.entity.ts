@@ -27,7 +27,7 @@ export class Vaccination extends Document {
     dose: string
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Management.name, required: false})
-    management: Management    
+    management_id: Management    
 
 }
 export const VaccinationSchema = SchemaFactory.createForClass(Vaccination)
