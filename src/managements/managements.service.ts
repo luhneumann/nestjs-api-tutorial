@@ -4,6 +4,7 @@ import { UpdateManagementDto } from './dto/update-management.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Management } from './entities/management.entity';
 import { Model } from 'mongoose';
+import { WeightControl } from 'src/weight-control/entities/weight-control.entity';
 
 @Injectable()
 export class ManagementsService {
@@ -24,6 +25,12 @@ export class ManagementsService {
     try {
       return await this.managementModel
       .find()
+      .populate('medicines')
+      .populate('events')
+      .populate('deworming')
+      .populate('vaccination')
+      .populate('animal_deaths')
+      .populate('weight_control')
       .exec()
     } catch (error) {
       console.log(error)
@@ -34,6 +41,12 @@ export class ManagementsService {
     try {
       return await this.managementModel
       .findById(id)
+      .populate('medicines')
+      .populate('events')
+      .populate('deworming')
+      .populate('vaccination')
+      .populate('animal_deaths')
+      .populate('weight_control')
       .exec()
     } catch (error) {
       console.log(error)

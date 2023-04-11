@@ -8,16 +8,16 @@ import { User } from "src/user/entities/user.entities";
 @Schema({versionKey: false})
 export class Medicine extends Document {
     @Prop({type: mongoose.Schema.Types.ObjectId, ref:User.name, required: false})
-    user: User
-
-    @Prop({type: mongoose.Schema.Types.ObjectId, ref:Management.name, required: false})
-    management: Management
+    user: User    
 
     @Prop({type: mongoose.Schema.Types.ObjectId, ref:Lot.name, required: false})
     lot: Lot
 
     @Prop({type: mongoose.Schema.Types.ObjectId, ref:Animal.name, required: false})
     animal: Animal
+
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref:Management.name, required: false})
+    management: Management
 
     @Prop({type: String, required: false})
     category: string

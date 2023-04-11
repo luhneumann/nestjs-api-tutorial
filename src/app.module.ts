@@ -17,6 +17,7 @@ import { DewormingModule } from './deworming/deworming.module';
 import { EventsModule } from './events/events.module';
 import { MedicinesModule } from './medicines/medicines.module';
 import { AnimalDeathsModule } from './animal-deaths/animal-deaths.module';
+import { DiseaseModule } from './disease/disease.module';
 
 
 @Module({
@@ -37,7 +38,8 @@ import { AnimalDeathsModule } from './animal-deaths/animal-deaths.module';
     DewormingModule,
     EventsModule,
     MedicinesModule,
-    AnimalDeathsModule
+    AnimalDeathsModule,
+    DiseaseModule
   ],  
    controllers: [],
    providers:[]
