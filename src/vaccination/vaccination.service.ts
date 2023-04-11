@@ -5,6 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Vaccination, VaccinationSchema } from './entities/vaccination.entity';
 import { Model } from 'mongoose';
 
+
+
 @Injectable()
 export class VaccinationService {
   constructor(@InjectModel(Vaccination.name) private readonly vaccinationModel: Model<Vaccination>){}
