@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnimalDeathDto } from './dto/create-animal-death.dto';
 import { UpdateAnimalDeathDto } from './dto/update-animal-death.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { AnimalDeath } from './entities/animal-death.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AnimalDeathsService {
-  create(createAnimalDeathDto: CreateAnimalDeathDto) {
-    return 'This action adds a new animalDeath';
+  constructor(@InjectModel(AnimalDeath.name) private readonly animalDeathModel: Model<AnimalDeath>){}
+
+  async create(createAnimalDeathDto: CreateAnimalDeathDto) {
+    try {
+      const newAnimalDeath = await new this.animalDeathModel(createAnimalDeathDto)
+      .save()
+      return newAnimalDeath
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  findAll() {
-    return `This action returns all animalDeaths`;
+  async findAll() {
+    try {
+      return await this.animalDeathModel.find().exec()
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} animalDeath`;
+  async findOne(id: string) {
+    try {
+      return await this.animalDeathModel.findById(id)
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  update(id: number, updateAnimalDeathDto: UpdateAnimalDeathDto) {
-    return `This action updates a #${id} animalDeath`;
+  async update(id: string, updateAnimalDeathDto: UpdateAnimalDeathDto) {
+    try {
+      return await this.animalDeathModel
+      .findByIdAndUpdate({_id:id}, updateAnimalDeathDto)
+      .exec()
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} animalDeath`;
+  async remove(id: string) {
+    try {
+      return await this.animalDeathModel.findByIdAndDelete(id)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
