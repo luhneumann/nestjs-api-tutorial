@@ -22,6 +22,7 @@ import { ReprodutionTimeModule } from './reprodution-time/reprodution-time.modul
 import { AbortionModule } from './abortion/abortion.module';
 import { GestationsModule } from './gestations/gestations.module';
 import { ParturitionsModule } from './parturitions/parturitions.module';
+import { SalesModule } from './sales/sales.module';
 
 
 @Module({
@@ -47,7 +48,8 @@ import { ParturitionsModule } from './parturitions/parturitions.module';
     ReprodutionTimeModule,
     AbortionModule,
     GestationsModule,
-    ParturitionsModule
+    ParturitionsModule,
+    SalesModule
   ],  
    controllers: [],
    providers:[]

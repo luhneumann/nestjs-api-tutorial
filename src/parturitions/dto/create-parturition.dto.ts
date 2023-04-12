@@ -1,14 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Date } from "mongoose";
 
 export class CreateParturitionDto {
-    @ApiProperty({ type: String, example: '10/04/2023' , required: false})
+    @ApiProperty({ type: String , required: false})
     date: Date
 
     @ApiProperty({ type: String, required: false})
     matrix: string
 
     @ApiProperty({ type: String, example:'Próprio', required: false})
-    father_property: string
+    father_owner: string
 
     @ApiProperty({ type: String, example:'Bode1', required: false})
     father_name: string

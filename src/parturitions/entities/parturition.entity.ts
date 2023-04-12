@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Date, Document } from "mongoose";
 
 export enum FatherEnum{
     'Own' = 'Own',
@@ -15,7 +15,7 @@ export class Parturition extends Document{
     matrix: string
 
     @Prop({type: String, enum: FatherEnum , default: FatherEnum.Own, required: false})
-    father_property: string
+    father_owner: string
 
     @Prop({type: String, required: false})
     father_name: string
