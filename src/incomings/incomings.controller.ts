@@ -18,7 +18,7 @@ export class IncomingsController {
     isArray: false
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados'    
   })
   @ApiOperation({summary: 'Incomings - Cria um nova entrada de receita'})
@@ -34,7 +34,7 @@ export class IncomingsController {
     isArray: true
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados'    
   })
   @ApiOperation({summary: 'Incomings - Retorna uma lista de entradas de receita'})
@@ -50,7 +50,7 @@ export class IncomingsController {
     isArray: false
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados'    
   })
   @ApiOperation({summary: 'Incomings - Retorna uma entrada de receita'})
@@ -66,7 +66,7 @@ export class IncomingsController {
     isArray: false
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados'    
   })
   @ApiOperation({summary: 'Incomings - Edita uma entrada de receita'})
@@ -82,7 +82,7 @@ export class IncomingsController {
     isArray: false
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados'    
   })
   @ApiOperation({summary: 'Incomings - Remove uma entrada de receita'})

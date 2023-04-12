@@ -24,6 +24,7 @@ import { GestationsModule } from './gestations/gestations.module';
 import { ParturitionsModule } from './parturitions/parturitions.module';
 import { SalesModule } from './sales/sales.module';
 import { IncomingsModule } from './incomings/incomings.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 
 @Module({
@@ -51,7 +52,8 @@ import { IncomingsModule } from './incomings/incomings.module';
     GestationsModule,
     ParturitionsModule,
     SalesModule,
-    IncomingsModule
+    IncomingsModule,
+    ExpensesModule
   ],  
    controllers: [],
    providers:[]
