@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document, Mongoose } from "mongoose";
 import { Animal } from "src/animals/entities/animal.entity";
 
@@ -13,3 +13,4 @@ export class Abortion extends Document{
     @Prop({ type: String, required: false})
     observation: string
 }
+export const AbortionSchema = SchemaFactory.createForClass(Abortion)
