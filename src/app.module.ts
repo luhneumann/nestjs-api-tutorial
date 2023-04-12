@@ -23,6 +23,7 @@ import { AbortionModule } from './abortion/abortion.module';
 import { GestationsModule } from './gestations/gestations.module';
 import { ParturitionsModule } from './parturitions/parturitions.module';
 import { SalesModule } from './sales/sales.module';
+import { IncomingsModule } from './incomings/incomings.module';
 
 
 @Module({
@@ -49,7 +50,8 @@ import { SalesModule } from './sales/sales.module';
     AbortionModule,
     GestationsModule,
     ParturitionsModule,
-    SalesModule
+    SalesModule,
+    IncomingsModule
   ],  
    controllers: [],
    providers:[]
