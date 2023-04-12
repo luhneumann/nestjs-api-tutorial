@@ -19,6 +19,7 @@ import { MedicinesModule } from './medicines/medicines.module';
 import { AnimalDeathsModule } from './animal-deaths/animal-deaths.module';
 import { DiseaseModule } from './disease/disease.module';
 import { ReprodutionTimeModule } from './reprodution-time/reprodution-time.module';
+import { AbortionModule } from './abortion/abortion.module';
 
 
 @Module({
@@ -41,7 +42,8 @@ import { ReprodutionTimeModule } from './reprodution-time/reprodution-time.modul
     MedicinesModule,
     AnimalDeathsModule,
     DiseaseModule,
-    ReprodutionTimeModule
+    ReprodutionTimeModule,
+    AbortionModule
   ],  
    controllers: [],
    providers:[]
