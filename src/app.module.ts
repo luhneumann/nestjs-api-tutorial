@@ -20,6 +20,8 @@ import { AnimalDeathsModule } from './animal-deaths/animal-deaths.module';
 import { DiseaseModule } from './disease/disease.module';
 import { ReprodutionTimeModule } from './reprodution-time/reprodution-time.module';
 import { AbortionModule } from './abortion/abortion.module';
+import { GestationsModule } from './gestations/gestations.module';
+import { ParturitionsModule } from './parturitions/parturitions.module';
 
 
 @Module({
@@ -43,7 +45,9 @@ import { AbortionModule } from './abortion/abortion.module';
     AnimalDeathsModule,
     DiseaseModule,
     ReprodutionTimeModule,
-    AbortionModule
+    AbortionModule,
+    GestationsModule,
+    ParturitionsModule
   ],  
    controllers: [],
    providers:[]

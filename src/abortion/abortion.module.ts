@@ -15,5 +15,6 @@ import { Abortion, AbortionSchema } from './entities/abortion.entity';
   ],
   controllers: [AbortionController],
   providers: [AbortionService]
+  
 })
 export class AbortionModule {}
