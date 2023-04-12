@@ -5,8 +5,5 @@ import { User } from "src/user/entities/user.entities";
 
 export class ListMedicineDto extends PartialType(CreateMedicineDto) {
     @ApiProperty({type: String, required: false})
-    _id: string    
-
-    @ApiProperty({type: String, required: false})
-    management_id: string
+    _id: string       
 }

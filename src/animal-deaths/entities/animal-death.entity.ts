@@ -9,6 +9,9 @@ export class AnimalDeath extends Document{
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref:User.name , required: false })
     user: User
 
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Event.name ,required: false})
+    event_id: Event
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref:Animal.name , required: false })
     animal: Animal
 

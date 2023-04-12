@@ -35,6 +35,16 @@ export class AnimalDeathsService {
     }    
   }
 
+  async findEventId(event_id: string){
+    try {
+      const conditions = {event_id: event_id}
+      const eventId = await this.animalDeathModel.findOne(conditions).exec()
+      return eventId
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async update(id: string, updateAnimalDeathDto: UpdateAnimalDeathDto) {
     try {
       return await this.animalDeathModel

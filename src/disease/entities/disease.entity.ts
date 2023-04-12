@@ -12,6 +12,9 @@ export class Disease extends Document{
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Management.name , required: false})
     management_id: Management
 
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Event.name ,required: false})
+    event_id: Event
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Animal.name , required: false})
     animal: Animal
 
@@ -23,5 +26,7 @@ export class Disease extends Document{
     
     @Prop({ type: String, required: false})
     observation: string
+
+
 }
 export const DiseaseSchema = SchemaFactory.createForClass(Disease)

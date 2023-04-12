@@ -14,6 +14,7 @@ import { Disease, DiseaseSchema } from './entities/disease.entity';
     ])
   ],
   controllers: [DiseaseController],
-  providers: [DiseasesService]
+  providers: [DiseasesService],
+  exports:[DiseaseModule, DiseasesService]
 })
 export class DiseaseModule {}

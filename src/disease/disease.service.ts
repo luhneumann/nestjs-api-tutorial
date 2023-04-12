@@ -37,6 +37,16 @@ export class DiseasesService {
     }
   }
 
+  async findEventId(event_id: string){
+    try {
+      const conditions = {event_id: event_id}
+      const eventId = await this.diseaseModel.findOne(conditions).exec()
+      return eventId
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async update(id: string, updateDiseaseDto: UpdateDiseaseDto) {
     try {
       return await this.diseaseModel

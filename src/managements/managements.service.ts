@@ -40,15 +40,7 @@ export class ManagementsService {
     }    
   }
 
-  async findOne(id: string) {
-    try {
-      return await this.managementModel
-      .findById(id)     
-      .exec()
-    } catch (error) {
-      console.log(error)
-    }    
-  }
+
 
   async findEachChangesOfManagements(id: string){
     try {      

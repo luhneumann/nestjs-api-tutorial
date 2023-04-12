@@ -3,9 +3,6 @@ import mongoose from "mongoose";
 import { Animal } from "src/animals/entities/animal.entity";
 import { Document } from "mongoose";
 import { User } from "src/user/entities/user.entities";
-import { WeightControl } from "src/weight-control/entities/weight-control.entity";
-import { Medicine } from "src/medicines/entities/medicine.entity";
-
 
 @Schema({versionKey: false})
 export class Management extends Document {
@@ -17,25 +14,7 @@ export class Management extends Document {
     animal: Animal[]
 
     @Prop({ type: Date, required: false})
-    date: Date
-
-    @Prop({ type: String, required: false})
-    medicines: string
-
-    @Prop({ type: String, required: false})
-    events: string
-
-    @Prop({ type: String, required: false})
-    deworming: string
-
-    @Prop({ type: String, required: false})
-    animal_deaths: string
-
-    @Prop({ type: String, required: false})
-    vaccination: string
-
-    @Prop({ type: String, required: false})
-    weight_control: string
+    date: Date   
     
 }
 export const ManagementSchema = SchemaFactory.createForClass(Management)

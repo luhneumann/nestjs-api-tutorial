@@ -59,6 +59,22 @@ export class EventsController {
     return await this.eventsService.findOne(id);
   }
 
+  @Get('details/:event_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListEventDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Events - Retorna um evento'})
+  async findEachEvent(@Param('event_id') event_id: string) {
+    return await this.eventsService.findEachEvent(event_id);
+  }
+
   @Put(':id')
   @ApiResponse({
     status: 200,

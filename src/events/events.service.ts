@@ -4,11 +4,15 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Event } from './entities/event.entity';
 import { Model } from 'mongoose';
+import { AnimalDeathsService } from 'src/animal-deaths/animal-deaths.service';
+import { DiseasesService } from 'src/disease/disease.service';
 
 
 @Injectable()
 export class EventsService {
-  constructor(@InjectModel(Event.name) private readonly eventModel: Model<Event>){}
+  constructor(@InjectModel(Event.name) private readonly eventModel: Model<Event>,
+  private readonly animalDeaths: AnimalDeathsService,
+  private readonly diseases: DiseasesService){}
 
   async create(createEventDto: CreateEventDto) {
     try{
@@ -43,6 +47,20 @@ export class EventsService {
       return managementId
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async findEachEvent(id: string){
+    try {      
+      const diseases = await this.diseases.findEventId(id)      
+      const animalDeaths = await this.animalDeaths.findEventId(id)      
+                  
+      return {
+        diseases,
+        animalDeaths,        
+      }      
+    } catch (error) {
+      console.log()
     }
   }
 

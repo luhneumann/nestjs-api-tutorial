@@ -7,6 +7,9 @@ export class CreateAnimalDeathDto {
     user: User
 
     @ApiProperty({ type: String, required: false})
+    event_id: Event
+
+    @ApiProperty({ type: String, required: false})
     animal: Animal
 
     @ApiProperty({ type: Date, required: false})

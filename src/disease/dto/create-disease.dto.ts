@@ -9,7 +9,10 @@ export class CreateDiseaseDto {
     user: User
 
     @ApiProperty({ type: String, required: false })
-    management: Management
+    management_id: Management
+
+    @ApiProperty({ type: String, required: false})
+    event_id: Event
 
     @ApiProperty({ type: String, required: false })
     animal: Animal
