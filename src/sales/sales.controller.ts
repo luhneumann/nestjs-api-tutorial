@@ -1,34 +1,92 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ListSaleDto } from './dto/list-sale.dto';
 
+@ApiTags('sales')
 @Controller('sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @Post()
-  create(@Body() createSaleDto: CreateSaleDto) {
-    return this.salesService.create(createSaleDto);
+  @ApiResponse({
+    status: 200,
+    description: 'Cria um objeto',
+    type: CreateSaleDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados' 
+  })
+  @ApiOperation({summary: 'Sales - cria um novo registro de venda'})
+  async create(@Body() createSaleDto: CreateSaleDto) {
+    return await this.salesService.create(createSaleDto);
   }
 
   @Get()
-  findAll() {
-    return this.salesService.findAll();
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    type: ListSaleDto,
+    isArray: true
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados' 
+  })
+  @ApiOperation({summary: 'Sales - retorna uma lista de vendas'})
+  async findAll() {
+    return await this.salesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.salesService.findOne(+id);
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: UpdateSaleDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados' 
+  })
+  @ApiOperation({summary: 'Sales - Retorna um registro de venda'})
+  async findOne(@Param('id') id: string) {
+    return await this.salesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
-    return this.salesService.update(+id, updateSaleDto);
+  @Put(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Edita um objeto',
+    type: UpdateSaleDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados' 
+  })
+  @ApiOperation({summary: 'Sales - edita um registro de venda'})
+  async update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
+    return await this.salesService.update(id, updateSaleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.salesService.remove(+id);
+  @ApiResponse({
+    status: 200,
+    description: 'Cria um objeto',
+    type: UpdateSaleDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados' 
+  })
+  @ApiOperation({summary: 'Sales - Remove um registro de venda'})
+  async remove(@Param('id') id: string) {
+    return await this.salesService.remove(id);
   }
 }
