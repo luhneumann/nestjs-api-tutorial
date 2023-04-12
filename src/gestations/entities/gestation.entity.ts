@@ -7,7 +7,7 @@ export enum MatrizEnum {
     'Vazia' = 'Vazia'
 }
 
-@Schema({})
+@Schema({versionKey: false})
 export class Gestation extends Document{
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Animal.name, required: false })
     animal: Animal
@@ -16,7 +16,7 @@ export class Gestation extends Document{
     date: Date
     
     @Prop({ type: String, enum: MatrizEnum, default: MatrizEnum.Prenha, required: false})
-    matriz: string
+    matrix: string
 
     @Prop({ type: String, required: false})
     observations: string

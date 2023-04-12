@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGestationDto } from './dto/create-gestation.dto';
 import { UpdateGestationDto } from './dto/update-gestation.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Gestation } from './entities/gestation.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class GestationsService {
-  create(createGestationDto: CreateGestationDto) {
-    return 'This action adds a new gestation';
+  constructor(@InjectModel(Gestation.name) private readonly gestationModel: Model<Gestation>){}
+
+  async create(createGestationDto: CreateGestationDto) {
+    try {
+      const newGestation = await new this.gestationModel(createGestationDto)
+      .save()
+      return newGestation
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  findAll() {
-    return `This action returns all gestations`;
+  async findAll() {
+    try {
+       return await this.gestationModel.find().exec()      
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gestation`;
+  async findOne(id: string) { 
+    try {
+      return await this.gestationModel.findById(id).exec()      
+    } catch (error) {
+      console.log(error)
+    }    
   }
 
-  update(id: number, updateGestationDto: UpdateGestationDto) {
-    return `This action updates a #${id} gestation`;
+  async update(id: string, updateGestationDto: UpdateGestationDto) {
+    try {
+      return await this.gestationModel.findByIdAndUpdate({_id: id}, updateGestationDto).exec()      
+   } catch (error) {
+     console.log(error)
+   }    
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} gestation`;
+  async remove(id: string) {
+    try {
+      return await this.gestationModel.findByIdAndRemove(id).exec()      
+   } catch (error) {
+     console.log(error)
+   }    
   }
 }

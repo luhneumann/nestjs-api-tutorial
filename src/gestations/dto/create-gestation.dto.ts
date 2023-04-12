@@ -10,5 +10,8 @@ export class CreateGestationDto {
     date: Date
 
     @ApiProperty({type: String, required: false})
+    matrix: string
+
+    @ApiProperty({type: String, required: false})
     observations: string
 }
