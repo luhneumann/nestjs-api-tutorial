@@ -1,34 +1,92 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ReprodutionTimeService } from './reprodution-time.service';
 import { CreateReprodutionTimeDto } from './dto/create-reprodution-time.dto';
 import { UpdateReprodutionTimeDto } from './dto/update-reprodution-time.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ListReprodutionTimeDto } from './dto/list-reprodution-time.dto';
 
+@ApiTags('reprodution-time')
 @Controller('reprodution-time')
 export class ReprodutionTimeController {
   constructor(private readonly reprodutionTimeService: ReprodutionTimeService) {}
 
   @Post()
-  create(@Body() createReprodutionTimeDto: CreateReprodutionTimeDto) {
-    return this.reprodutionTimeService.create(createReprodutionTimeDto);
+  @ApiResponse({
+    status: 200,
+    description: 'Cria um novo objeto',
+    type: CreateReprodutionTimeDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'    
+  })
+  @ApiOperation({ summary: 'Reprodution-time - Cria um novo registro de reprodução'})
+  async create(@Body() createReprodutionTimeDto: CreateReprodutionTimeDto) {
+    return await this.reprodutionTimeService.create(createReprodutionTimeDto);
   }
 
   @Get()
-  findAll() {
-    return this.reprodutionTimeService.findAll();
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    type: ListReprodutionTimeDto,
+    isArray: true
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'    
+  })
+  @ApiOperation({ summary: 'Reprodution-time - Retorna todos registros de reprodução'})
+  async findAll() {
+    return await this.reprodutionTimeService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reprodutionTimeService.findOne(+id);
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListReprodutionTimeDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'    
+  })
+  @ApiOperation({ summary: 'Reprodution-time - Retorna um registro de reprodução'})
+  async findOne(@Param('id') id: string) {
+    return await this.reprodutionTimeService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReprodutionTimeDto: UpdateReprodutionTimeDto) {
-    return this.reprodutionTimeService.update(+id, updateReprodutionTimeDto);
+  @Put(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Edita um objeto',
+    type: UpdateReprodutionTimeDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'    
+  })
+  @ApiOperation({ summary: 'Reprodution-time - Edita um registro de reprodução'})
+  async update(@Param('id') id: string, @Body() updateReprodutionTimeDto: UpdateReprodutionTimeDto) {
+    return await this.reprodutionTimeService.update(id, updateReprodutionTimeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reprodutionTimeService.remove(+id);
+  @ApiResponse({
+    status: 200,
+    description: 'Remove um objeto',
+    type: UpdateReprodutionTimeDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'    
+  })
+  @ApiOperation({ summary: 'Reprodution-time - Remove um registro de reprodução'})
+  async remove(@Param('id') id: string) {
+    return await this.reprodutionTimeService.remove(id);
   }
 }
