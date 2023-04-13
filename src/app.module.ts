@@ -25,6 +25,7 @@ import { ParturitionsModule } from './parturitions/parturitions.module';
 import { SalesModule } from './sales/sales.module';
 import { IncomingsModule } from './incomings/incomings.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { TasksModule } from './tasks/tasks.module';
 
 
 @Module({
@@ -53,7 +54,8 @@ import { ExpensesModule } from './expenses/expenses.module';
     ParturitionsModule,
     SalesModule,
     IncomingsModule,
-    ExpensesModule
+    ExpensesModule,
+    TasksModule
   ],  
    controllers: [],
    providers:[]
