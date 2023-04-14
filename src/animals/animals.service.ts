@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Animal } from './entities/animal.entity';
 import { Model } from 'mongoose';
 
+
 @Injectable()
 export class AnimalsService {
   constructor(@InjectModel(Animal.name) private animalModel: Model<Animal>){}
@@ -15,7 +16,7 @@ export class AnimalsService {
       return newAnimal;   
 
     } catch (error) {
-      console.log(error)
+      return error 
     }    
   }
 

@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } fro
 import { AbortionService } from './abortion.service';
 import { CreateAbortionDto } from './dto/create-abortion.dto';
 import { UpdateAbortionDto } from './dto/update-abortion.dto';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListAbortionDto } from './dto/list-abortion.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
@@ -13,15 +13,15 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class AbortionController {
   constructor(private readonly abortionService: AbortionService) {}
 
-  @Post()
+  @Post()  
   @ApiResponse({
     status: 200,
     description: 'Cria um objeto',
     type: CreateAbortionDto,
     isArray: false
-  })
+  })  
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados',   
   })
   @ApiOperation({ summary: 'Abortion - Cria um novo registro de aborto'})
@@ -37,7 +37,7 @@ export class AbortionController {
     isArray: true
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados',   
   })
   @ApiOperation({ summary: 'Abortion - Lista todos registros de aborto'})
@@ -53,7 +53,7 @@ export class AbortionController {
     isArray: false
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados',   
   })
   @ApiOperation({ summary: 'Abortion - Retorna um registro de aborto'})
@@ -69,7 +69,7 @@ export class AbortionController {
     isArray: false
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados',   
   })
   @ApiOperation({ summary: 'Abortion - Edita um registro de aborto'})
@@ -80,26 +80,15 @@ export class AbortionController {
   @Delete(':id')
   @ApiResponse({
     status: 200,
-    description: 'Deleta um objeto',
-    type: UpdateAbortionDto,
-    isArray: false
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Retorna uma mensagem de erro sobre os dados enviados',   
-  })
-  @ApiOperation({ summary: 'Abortion - Lista todos registros de aborto'})
-  @ApiResponse({
-    status: 200,
     description: 'Cria um objeto',
     type: ListAbortionDto,
     isArray: true
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     description: 'Retorna uma mensagem de erro sobre os dados enviados',   
   })
-  @ApiOperation({ summary: 'Abortion - Lista todos registros de aborto'})
+  @ApiOperation({ summary: 'Abortion - Remove um registro de aborto'})
   async remove(@Param('id') id: string) {
     return await this.abortionService.remove(id);
   }
