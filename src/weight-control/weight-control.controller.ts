@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { WeightControlService } from './weight-control.service';
 import { CreateWeightControlDto } from './dto/create-weight-control.dto';
 import { UpdateWeightControlDto } from './dto/update-weight-control.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListWeightControlDto } from './dto/list-weight-control.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('weight-control')
 @Controller('weight-control')
 export class WeightControlController {

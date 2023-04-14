@@ -33,8 +33,7 @@ export class UserService {
             return await this.userModel
             .find()          
             .populate('city')
-            .populate('state')
-            .populate('farm')
+            .populate('state')            
             .exec()
         } catch (error) { 
             console.log(error)
@@ -50,8 +49,7 @@ export class UserService {
                 email: email,
             })            
             .populate('city')
-            .populate('state')
-            .populate('farm')
+            .populate('state')            
             .exec()
         } catch (error) {
             console.log(error)
@@ -64,8 +62,7 @@ export class UserService {
             return await this.userModel
                 .findById(id)                  
                 .populate('city')
-                .populate('state')
-                .populate('farm')
+                .populate('state')                
                 .exec()              
         } catch (error) { 
             console.log(error)

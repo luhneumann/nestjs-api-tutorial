@@ -7,6 +7,8 @@ import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { UpdateCityDto } from "./dto/update-city.dto";
 
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('cities')
 @Controller('cities')
 export class CitiesController {

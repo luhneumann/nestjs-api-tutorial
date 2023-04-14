@@ -1,7 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Date } from "mongoose";
+import { User } from "src/user/entities/user.entities";
 
 export class CreateParturitionDto {
+
+    @ApiProperty({ type: String, required: false})
+    user: User
+
     @ApiProperty({ type: String , required: false})
     date: Date
 

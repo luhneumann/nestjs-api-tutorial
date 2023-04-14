@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "src/auth/auth.service";
-import { signInDTO } from "src/auth/dto/auth.dto";
+import { UserRefreshTokenDto, signInDTO } from "src/account/dto/account.dto";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
 
 @ApiTags('account')
@@ -27,6 +27,20 @@ export class AccountController {
         email: user.email
       }             
       return { user, token: this.jwtService.sign(payload)};
+    }
+
+    @Post('refresh-token')
+    @ApiOperation({summary: 'Atualizar token'})
+    @ApiCreatedResponse({
+      description: 'The token has been successfully created',
+      type: UserRefreshTokenDto
+    })
+    async refreshToken(@Body() {refresh_token}: UserRefreshTokenDto){
+      try {
+        const decode: any = this.jwtService.decode(refresh_token)
+      } catch (error) {
+        
+      }
     }
              
 }

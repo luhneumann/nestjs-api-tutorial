@@ -6,8 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Api Nest')
-    .setDescription('Api para teste')
+    .setTitle('Api Bode Tech')
+    .setDescription('Api a ser utilizada no aplicativo BodeTech')
     .setVersion('0.0.1')
     .addTag('default')
     .build()

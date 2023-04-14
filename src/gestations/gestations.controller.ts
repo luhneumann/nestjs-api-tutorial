@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { GestationsService } from './gestations.service';
 import { CreateGestationDto } from './dto/create-gestation.dto';
 import { UpdateGestationDto } from './dto/update-gestation.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListAbortionDto } from 'src/abortion/dto/list-abortion.dto';
 import { ListGestationDto } from './dto/list-gestation.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('gestations')
 @Controller('gestations')
 export class GestationsController {

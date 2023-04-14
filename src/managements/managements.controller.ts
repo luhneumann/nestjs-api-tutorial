@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { ManagementsService } from './managements.service';
 import { CreateManagementDto } from './dto/create-management.dto';
 import { UpdateManagementDto } from './dto/update-management.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListManagementDto } from './dto/list-management.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('managements')
 @Controller('managements')
 export class ManagementsController {
@@ -42,7 +45,6 @@ export class ManagementsController {
   async findAll() {
     return await this.managementsService.findAll();
   }
-
 
   @Get('/details/:management_id')
   @ApiResponse({

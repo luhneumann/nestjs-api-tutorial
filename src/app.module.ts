@@ -26,18 +26,22 @@ import { SalesModule } from './sales/sales.module';
 import { IncomingsModule } from './incomings/incomings.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
-  imports: [     
+  imports: [
+    /*ConfigModule.forRoot({
+      envFilePath: '.env'
+    }),*/
+    MongooseModule.forRoot(`mongodb+srv://Lucas_Monteiro:dev_Cria23@bodetech.zlj0dou.mongodb.net/todo?retryWrites=true&w=majority`),
     FarmsModule,
     CitiesModule,
-    StatesModule,    
+    StatesModule,
     ProfessionsModule,
-    AuthModule,   
-    UserModule,    
+    AuthModule,
+    UserModule,
     AccountModule,
-    MongooseModule.forRoot('mongodb+srv://luanafneumann22:181500@cluster0.lun8ojy.mongodb.net/?retryWrites=true&w=majority'),
     AnimalsModule,
     LotsModule,
     ManagementsModule,
@@ -56,8 +60,10 @@ import { TasksModule } from './tasks/tasks.module';
     IncomingsModule,
     ExpensesModule,
     TasksModule
-  ],  
-   controllers: [],
-   providers:[]
+  ],
+  controllers: [],
+  providers: []
 })
-export class AppModule {}
+export class AppModule {
+
+}

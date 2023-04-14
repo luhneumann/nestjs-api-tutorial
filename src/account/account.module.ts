@@ -8,6 +8,6 @@ import { Module } from "@nestjs/common";
     imports: [AuthModule, UserModule],
     providers: [AccountService],
     controllers: [AccountController],
-    exports: [AccountModule]
+    exports: [AccountModule, AccountService]
 })
 export class AccountModule {}

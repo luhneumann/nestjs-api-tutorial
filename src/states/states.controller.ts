@@ -6,6 +6,8 @@ import { ListStateDto } from "./dto/list-state-dto";
 import { UpdateStatesDto } from "./dto/update-state.dto";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('states')
 @Controller('states')
 export class StatesController {

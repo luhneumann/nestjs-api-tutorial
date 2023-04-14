@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { AnimalDeathsService } from './animal-deaths.service';
 import { CreateAnimalDeathDto } from './dto/create-animal-death.dto';
 import { UpdateAnimalDeathDto } from './dto/update-animal-death.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListAnimalDto } from 'src/animals/dto/list-animal.dto';
 import { ListAnimalDeathDto } from './dto/list-animal-death.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('animal-deaths')
 @Controller('animal-deaths')
 export class AnimalDeathsController {

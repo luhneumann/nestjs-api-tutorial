@@ -1,17 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreateFarmDto } from "./dto/create-farm.dto";
 import { FarmsService } from "./farms.service";
 import { ListFarmDto } from "./dto/list-farm.dto";
 import { UpdateFarmDto } from "./dto/update-farm.dto";
 import { ListUserDto } from "src/user/dto/list-user.dto";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('farms')
 @Controller('farms')
 export class FarmsController {
     constructor(private readonly farmsService: FarmsService) { }
-
-    
+        
     @Post()
     @ApiResponse({
         status: 200,

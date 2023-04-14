@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { ReprodutionTimeService } from './reprodution-time.service';
 import { CreateReprodutionTimeDto } from './dto/create-reprodution-time.dto';
 import { UpdateReprodutionTimeDto } from './dto/update-reprodution-time.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListReprodutionTimeDto } from './dto/list-reprodution-time.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('reprodution-time')
 @Controller('reprodution-time')
 export class ReprodutionTimeController {

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Date, Document } from "mongoose";
+import mongoose, { Date, Document } from "mongoose";
+import { User } from "src/user/entities/user.entities";
 
 export enum FatherEnum{
     'Own' = 'Own',
@@ -8,6 +9,10 @@ export enum FatherEnum{
 
 @Schema({ versionKey: false})
 export class Parturition extends Document{
+
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: User.name, required: false})
+    user: User
+
     @Prop({type: Date, required: false})
     date: Date
 
