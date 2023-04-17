@@ -17,48 +17,91 @@ export class CitiesService {
             ).save()
             return newCity
 
-        } catch (error) {
-            console.log(error)
-            return null
+        } catch (error: any) {
+            return {
+                message: 'Invalid data insertion',
+                error
+            }
         }
     }
 
     async getAll() {
         try {
             return await this.citiesModel.find().exec()
-        } catch (error) {
-            return error
+        } catch (error: any) {
+            return {
+                message: 'Search not found results',
+                error
+            }
         }
     }
 
     async findOne(id: string) {
         try {
-            return await this.citiesModel.findById(id).exec()
-        } catch (error) {
-            return error
+            const findOneCity = await this.citiesModel
+                .findById(id)
+                .exec()
+            if (!findOneCity) {
+                return {
+                    message: 'No city register matches this id'
+                }
+            } else {
+                return findOneCity
+            }
+        } catch (error: any) {
+            return {
+                message: 'Invalid Id',
+                error
+            }
         }
     }
 
     async update(id: string, updateData: UpdateCityDto) {
         try {
-            await this.citiesModel
+            const updateCity = await this.citiesModel
                 .findOneAndUpdate({ _id: id }, updateData)
                 .exec()
-            return await this.findOne(id)
-        } catch (error) {
-            return error
+            if (!updateCity) {
+                return {
+                    message: 'No city register matches this id'
+                }
+            } else {
+                return updateCity
+            }
+
+        } catch (error: any) {
+            if (error.path === "_id") {
+                return {
+                    message: 'Invalid Id',
+                    error
+                };
+            } else {
+                return {
+                    message: 'Invalid updating data',
+                    error
+                };
+            }
         }
     }
 
     async remove(id: string) {
         try {
-            const city = this.findOne(id)
+            const removeCity = this.findOne(id)
             await this.citiesModel
                 .findByIdAndDelete(id)
                 .exec()
-            return city
-        } catch (error) {
-            return error
+            if(!removeCity){
+                return {
+                    message: 'No city register matches this id'
+                }
+            } else {
+                return removeCity
+            }               
+        } catch (error: any) {
+            return {
+                message: 'Invalid Id',
+                error
+            }
         }
     }
 }

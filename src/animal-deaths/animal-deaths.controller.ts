@@ -62,6 +62,22 @@ export class AnimalDeathsController {
     return await this.animalDeathsService.findOne(id);
   }
 
+  @Get('event/:event_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListAnimalDeathDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Animal-deaths - Retorna um registro de evento'})  
+  async findEvent(@Param('event_id') event_id: string) {
+    return await this.animalDeathsService.findEventId(event_id);
+  }
+
   @Put(':id')
   @ApiResponse({
     status: 200,

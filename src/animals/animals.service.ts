@@ -8,50 +8,97 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class AnimalsService {
-  constructor(@InjectModel(Animal.name) private animalModel: Model<Animal>){}
+  constructor(@InjectModel(Animal.name) private animalModel: Model<Animal>) { }
 
   async create(createAnimalDto: CreateAnimalDto) {
     try {
       const newAnimal = await new this.animalModel(createAnimalDto).save();
-      return newAnimal;   
+      return newAnimal;
 
-    } catch (error) {
-      return error 
-    }    
+    } catch (error: any) {
+      return {
+        message: 'Invalid data insertion',
+        error
+      }
+    }
   }
 
   async findAll() {
-    try{
+    try {
       return await this.animalModel.find().exec();
-    } catch(error){
-      throw Error;
+    } catch (error: any) {
+      return {
+        message: 'Search not found results',
+        error
+      }
     }
   }
 
   async findOne(id: string) {
-    try{
-      return await this.animalModel.findById(id).exec();
-    } catch(erro) {
-      throw Error;
-    }   
+    try {
+      const findAnimal = await this.animalModel
+        .findById(id)
+        .exec();
+      if (!findAnimal) {
+        return {
+          message: 'No animal register matches this id'
+        }
+      } else {
+        return findAnimal
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
-    try{
+    try {
       const updateAnimal = await this.animalModel
-      .findByIdAndUpdate({_id: id}, updateAnimalDto)
-      .exec();
-      return updateAnimal
-    } catch (error){
-      throw Error
-    }    
+        .findByIdAndUpdate({ _id: id }, updateAnimalDto)
+        .exec();
+      if (!updateAnimal) {
+        return {
+          message: 'No animal register matches this id'
+        }
+      } else {
+        return updateAnimal
+      }
+
+    } catch (error: any) {
+      if (error.path === "_id") {
+        return {
+          message: 'Invalid Id',
+          error
+        };
+      } else {
+        return {
+          message: 'Invalid updating data',
+          error
+        };
+      }
+    }
   }
 
   async remove(id: string) {
-    try{
-      return await this.animalModel.findByIdAndDelete({_id: id}) ;
-    } catch(error){
-      throw Error
-    }    
+    try {
+      const removeAnimal = await this.animalModel
+      .findByIdAndDelete(id)
+      .exec();
+      if(!removeAnimal){
+        return {
+          message: 'No animal register matches this id'
+        }
+      } else {
+        return removeAnimal
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 }
