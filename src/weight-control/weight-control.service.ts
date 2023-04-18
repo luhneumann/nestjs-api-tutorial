@@ -14,8 +14,11 @@ export class WeightControlService {
       const newWeightControl = await new this.weightControlModel(createWeightControlDto)
       .save()
       return newWeightControl
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      return {
+        message: 'Invalid data insertion',
+        error
+      }
     }    
   }
 
@@ -25,17 +28,30 @@ export class WeightControlService {
       .find()
       .exec()
     } catch (error) {
-      console.log(error)
+      return {
+        message: 'Search not found results',
+        error
+      }
     }    
   }
 
   async findOne(id: string) {
     try {
-      return await this.weightControlModel
+      const findWeightControl = await this.weightControlModel
       .findById(id)
       .exec()
-    } catch (error) {
-      console.log(error)
+      if(!findWeightControl){
+        return{
+          message: 'No weight-control register matches this id'
+        }
+      } else {
+        return findWeightControl
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
     }
   }
 
@@ -44,29 +60,58 @@ export class WeightControlService {
       const conditions = {management_id: management_id}
       const managementId = await this.weightControlModel.findOne(conditions).exec()
       return managementId
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      return {
+        message: 'Invalid management_Id',
+        error
+      }
     }
   }
 
   async update(id: string, updateWeightControlDto: UpdateWeightControlDto) {
     try {
       const updateWeightControl = await this.weightControlModel
-      .findByIdAndUpdate({_id:id}, updateWeightControlDto)
+      .findByIdAndUpdate({_id:id}, updateWeightControlDto, {returnDocument: 'after'})
       .exec()
-      return updateWeightControl
-    } catch (error) {
-      console.log(error)
+      if(!updateWeightControl){
+        return {
+          message: 'No weight-control register matches this id'
+        }
+      } else {
+        return updateWeightControl
+      }      
+    } catch (error: any) {
+      if (error.path === "_id") {
+        return {
+          message: 'Invalid Id',
+          error
+        };
+      } else {
+        return {
+          message: 'Invalid updating data',
+          error
+        };
+      }
     }
   }
 
   async remove(id: string) {
     try {
-      return await this.weightControlModel
+      const removeWeightRegister = await this.weightControlModel
       .findByIdAndRemove(id)
       .exec()
-    } catch (error) {
-      console.log(error)
+      if(!removeWeightRegister){
+        return {
+          message: 'No weight-control register matches this id'
+        }
+      } else {
+        return 'Weight register removed'
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
     }    
   }
 }

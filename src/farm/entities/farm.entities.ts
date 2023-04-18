@@ -45,6 +45,9 @@ export class Farm extends Document {
     @Prop({ type: String,  enum: EmbryoEnum, default: EmbryoEnum.Yes })
     embryo_transfer: string
 
+    @Prop({type: Number, required: false})
+    total_animals: number
+
 }
 export const FarmSchema = SchemaFactory.createForClass(Farm)
 

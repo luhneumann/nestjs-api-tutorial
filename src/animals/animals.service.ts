@@ -57,7 +57,7 @@ export class AnimalsService {
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
     try {
       const updateAnimal = await this.animalModel
-        .findByIdAndUpdate({ _id: id }, updateAnimalDto)
+        .findByIdAndUpdate({ _id: id }, updateAnimalDto, {returnDocument: 'after'})
         .exec();
       if (!updateAnimal) {
         return {
@@ -92,7 +92,9 @@ export class AnimalsService {
           message: 'No animal register matches this id'
         }
       } else {
-        return removeAnimal
+        return {
+          message: 'Animal register removed'
+        }
       }
     } catch (error: any) {
       return {

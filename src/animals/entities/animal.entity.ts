@@ -77,6 +77,7 @@ export class Animal extends Document {
 
     @Prop({type: String, required: false})
     service: string
+    
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal)

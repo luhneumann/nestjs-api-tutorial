@@ -9,67 +9,114 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class VaccinationService {
-  constructor(@InjectModel(Vaccination.name) private readonly vaccinationModel: Model<Vaccination>){}
-    
+  constructor(@InjectModel(Vaccination.name) private readonly vaccinationModel: Model<Vaccination>) { }
+
   async create(createVaccinationDto: CreateVaccinationDto) {
     try {
       const newVaccination = await new this.vaccinationModel(createVaccinationDto)
-      .save()
+        .save()
       return newVaccination
 
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      return {
+        message: 'Invalid data insertion',
+        error
+      }
     }
   }
 
   async findAll() {
     try {
       return await this.vaccinationModel
-      .find()
-      .exec()
-    } catch (error) {
-      console.log(error)
-    }   
+        .find()
+        .exec()
+    } catch (error: any) {
+      return {
+        message: 'Search not found results',
+        error
+      }
+    }
   }
 
-  async findManagementId(management_id: string){
+  async findManagementId(management_id: string) {
     try {
-      const conditions = {management_id: management_id}
+      const conditions = { management_id: management_id }
       const managementId = await this.vaccinationModel.find(conditions).exec()
       return managementId
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      return {
+        message: 'Invalid management_Id',
+        error
+      }
     }
   }
 
   async findOne(id: string) {
     try {
-      return await this.vaccinationModel
-      .findById(id)
-      .exec()
-    } catch (error) {
-      console.log(error)
-    }    
+      const findOneVaccination = await this.vaccinationModel
+        .findById(id)
+        .exec()
+      if (!findOneVaccination) {
+        return {
+          message: 'No vaccination register matches this id'
+        }
+      } else {
+        return {
+          findOneVaccination
+        }
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 
   async update(id: string, updateVaccinationDto: UpdateVaccinationDto) {
     try {
-      const updateVaccine = await this.vaccinationModel
-      .findByIdAndUpdate({_id:id}, updateVaccinationDto)
-      .exec()
-      return updateVaccine
-    } catch (error) {
-      console.log(error)
-    }   
+      const updateVaccinationRegister = await this.vaccinationModel
+        .findByIdAndUpdate({ _id: id }, updateVaccinationDto)
+        .exec()
+      if (!updateVaccinationRegister) {
+        return {
+          message: 'No vaccination register matches this id'
+        }
+      } else {
+        return updateVaccinationRegister
+      }
+    } catch (error: any) {
+      if (error.path === "_id") {
+        return {
+          message: 'Invalid Id',
+          error
+        };
+      } else {
+        return {
+          message: 'Invalid updating data',
+          error
+        };
+      }
+    }
   }
 
   async remove(id: string) {
     try {
-      return await this.vaccinationModel
-      .findByIdAndRemove(id)
-      .exec()
-    } catch (error) {
-      console.log(error)
-    }    
+      const removeVaccinationRegister = await this.vaccinationModel
+        .findByIdAndRemove(id)
+        .exec()
+      if(!removeVaccinationRegister){
+        return {
+          message: 'No vaccination register matches this id'
+        }
+      } else {
+        return 'Vaccination register removed'
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 }

@@ -7,58 +7,96 @@ import { UpdateProfessionDto } from "./dto/update-professions.dto";
 
 @Injectable()
 export class ProfessionsService {
-    constructor(
-        @InjectModel(Profession.name)
-        private professionModel: Model<Profession>,
-    ) { }
+  constructor(
+    @InjectModel(Profession.name)
+    private professionModel: Model<Profession>,
+  ) { }
 
-    async create(createProfessionDto: CreateProfessionDto) {
-        try {
-            const newProfession = await new this.professionModel(
-                createProfessionDto,
-            ).save()
-            return newProfession
+  async create(createProfessionDto: CreateProfessionDto) {
+    try {
+      const newProfession = await new this.professionModel(
+        createProfessionDto,
+      ).save()
+      return newProfession
 
-        } catch (error) {
-            console.log(error)
-            return null
+    } catch (error: any) {
+      return {
+        message: 'Invalid data insertion',
+        error
+      }
+    }
+  }
+
+  async findAll() {
+    try {
+      return await this.professionModel.find().exec();
+    } catch (error: any) {
+      return {
+        message: 'Search not found results',
+        error
+      }
+    }
+  }
+
+  async findOne(id: string) {
+    try {
+      const findOneProfession = await this.professionModel.findById(id).exec()
+      if (!findOneProfession) {
+        return {
+          message: 'No profession register matches this id'
         }
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
     }
-
-    async findAll() {
-        try {
-            return await this.professionModel.find().exec();
-        } catch (error) { }
-    }
-
-    async findOne(id: string) {
-        try {
-            return await this.professionModel.findById(id).exec()
-        } catch (error) {
-            error
+  }
+  async update(id: string, updateData: UpdateProfessionDto) {
+    try {
+      const updateProfession = await this.professionModel
+        .findOneAndUpdate({ _id: id }, updateData, { returnDocument: 'after' })
+        .exec();
+      if (!updateProfession) {
+        return {
+          message: 'No profession register matches this id'
         }
-    }
-    async update(id: string, updateData: UpdateProfessionDto) {
-        try {
-            await this.professionModel
-                .findOneAndUpdate({ _id: id }, updateData)
-                .exec();
-            return await this.findOne(id)
-        } catch (error) {
-            return error
-        }
-    }
+      } else {
+        return updateProfession
+      }
 
-    async remove(id: string) {
-        try {
-            const profession = this.findOne(id)
-            await this.professionModel
-                .findOneAndDelete({ _id: id })
-                .exec()
-            return profession
-        } catch (error) {
-            return error
-        }
-
+    } catch (error: any) {
+      if (error.path === "_id") {
+        return {
+          message: 'Invalid Id',
+          error
+        };
+      } else {
+        return {
+          message: 'Invalid updating data',
+          error
+        };
+      }
     }
+  }
+
+  async remove(id: string) {
+    try {
+      const removeProfession = await this.professionModel.findByIdAndDelete(id).exec()
+      if (!removeProfession) {
+        return {
+          message: 'No profession register matches this id'
+        }
+      } else {
+        return removeProfession
+      }
+
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
+  }
 }

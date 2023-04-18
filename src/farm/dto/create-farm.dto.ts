@@ -37,4 +37,8 @@ export class CreateFarmDto {
     @ApiProperty({ type: String,  required: false})
     embryo_transfer: string
 
+    @ApiProperty({type: Number, required: false})
+    total_animals: number
+
+
 }

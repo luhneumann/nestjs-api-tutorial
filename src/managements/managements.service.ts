@@ -13,73 +13,106 @@ import { VaccinationService } from 'src/vaccination/vaccination.service';
 @Injectable()
 export class ManagementsService {
   constructor(@InjectModel(Management.name) private managementModel: Model<Management>,
-  public  medicinesService: MedicinesService,
-  public  eventsService: EventsService,
-  public  dewormingService: DewormingService,
-  public  weightControlService: WeightControlService,
-  public  vaccinationService: VaccinationService) { }
+    public medicinesService: MedicinesService,
+    public eventsService: EventsService,
+    public dewormingService: DewormingService,
+    public weightControlService: WeightControlService,
+    public vaccinationService: VaccinationService) { }
 
   async create(createManagementDto: CreateManagementDto) {
     try {
-        const newManagement = await new this.managementModel(createManagementDto)        
+      const newManagement = await new this.managementModel(createManagementDto)
         .save()
-
-        return newManagement
-    } catch(error){
-      console.log(error)
-    }    
+      return newManagement
+    } catch (error: any) {
+      return {
+        message: 'Invalid data insertion',
+        error
+      }
+    }
   }
 
   async findAll() {
     try {
-      return await this.managementModel
-      .find()      
-      .exec()
-    } catch (error) {
-      console.log(error)
-    }    
+      const findAllManagements = await this.managementModel
+        .find()
+        .exec()
+      if (!findAllManagements) {
+        return { message: 'Search not found results' }
+      } else {
+        return findAllManagements
+      }
+    } catch (error: any) {
+      return error
+    }
   }
 
-
-
-  async findEachChangesOfManagements(id: string){
-    try {      
-      const medicines = await this.medicinesService.findManagementId(id)      
-      const vaccination = await this.vaccinationService.findManagementId(id)      
-      const deworming = await this.dewormingService.findManagementId(id)      
-      const events = await this.eventsService.findManagementId(id)      
-      const weight_control = await this.weightControlService.findManagementId(id)                
+  async findEachChangesOfManagements(id: string) {
+    try {
+      const medicines = await this.medicinesService.findManagementId(id)
+      const vaccination = await this.vaccinationService.findManagementId(id)
+      const deworming = await this.dewormingService.findManagementId(id)
+      const events = await this.eventsService.findManagementId(id)
+      const weight_control = await this.weightControlService.findManagementId(id)
       return {
         medicines,
         vaccination,
         deworming,
         events,
         weight_control
-      }      
-    } catch (error) {
-      console.log()
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid management_id',
+        error
+      };
     }
   }
-  
 
   async update(id: string, updateManagementDto: UpdateManagementDto) {
-    try{
+    try {
       const updateManagement = await this.managementModel
-      .findByIdAndUpdate({_id: id}, updateManagementDto)
-      .exec()
-      return updateManagement
-    } catch (error){
-      console.log(error)
-    }    
+        .findByIdAndUpdate({ _id: id }, updateManagementDto, { returnDocument: 'after' })
+        .exec()
+      if (!updateManagement) {
+        return {
+          message: 'No management register matches this id'
+        }
+      } else {
+        return updateManagement
+      }
+    } catch (error: any) {
+      if (error.path === "_id") {
+        return {
+          message: 'Invalid Id',
+          error
+        };
+      } else {
+        return {
+          message: 'Invalid updating data',
+          error
+        };
+      }
+    }
   }
 
   async remove(id: string) {
     try {
-      return await this.managementModel
-      .findByIdAndRemove(id)
-      .exec()
-    } catch (error) {
-      console.log(error)
-    }    
+      const removeManagementRegister = await this.managementModel
+        .findByIdAndRemove(id)
+        .exec()
+      if (!removeManagementRegister) {
+        return {
+          message: 'No management register matches this id'
+        }
+      } else {
+        return 'Management register removed'
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 }

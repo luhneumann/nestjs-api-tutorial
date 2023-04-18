@@ -37,9 +37,7 @@ export class DewormingService {
 
   async findOne(id: string) {
     try {
-      const findOneDeworming = await this.dewormingModel
-        .findById(id)
-        .exec()
+      const findOneDeworming = await this.dewormingModel.findById(id).exec()
       if (!findOneDeworming) {
         return {
           message: 'No deworming register matches this id'
@@ -62,7 +60,7 @@ export class DewormingService {
       return managementId
     } catch (error: any) {
       return {
-        message: 'Invalid Id',
+        message: 'Invalid management_Id',
         error
       }
     }
@@ -71,7 +69,7 @@ export class DewormingService {
   async update(id: string, updateDewormingDto: UpdateDewormingDto) {
     try {
       const updateDeworming = await this.dewormingModel
-        .findByIdAndUpdate({ _id: id }, updateDewormingDto)
+        .findByIdAndUpdate({ _id: id }, updateDewormingDto, {returnDocument: 'after'})
         .exec()
       if (!updateDeworming) {
         return {
@@ -105,7 +103,7 @@ export class DewormingService {
           message: 'No deworming register matches this id'
         }
       } else {
-        return removeDeworming
+        return 'Deworming register removed'       
       }
     } catch (error: any) {
       return {

@@ -7,49 +7,92 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class SalesService {
-  constructor(@InjectModel(Sale.name) private readonly salesModel: Model<Sale>){}
+  constructor(@InjectModel(Sale.name) private readonly salesModel: Model<Sale>) { }
 
   async create(createSaleDto: CreateSaleDto) {
     try {
       const newSale = await new this.salesModel(createSaleDto)
-      .save()
+        .save()
       return newSale
-    } catch (error) {
-      console.log(error)
-    }    
+    } catch (error: any) {
+      return {
+        message: 'Invalid data insertion',
+        error
+      }
+    }
   }
 
   async findAll() {
     try {
-      return await this.salesModel.find().exec()    
+      return await this.salesModel.find().exec()
     } catch (error) {
-      console.log(error)
-    }        
+      return {
+        message: 'Search not found results',
+        error
+      }
+    }
   }
 
   async findOne(id: string) {
     try {
-      return await this.salesModel.findById(id).exec()    
-    } catch (error) {
-      console.log(error)
-    }  
+      const findOneSale = await this.salesModel.findById(id).exec()
+      if (!findOneSale) {
+        return {
+          message: 'No sale register matches this id'
+        }
+      } else {
+        return findOneSale
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 
   async update(id: string, updateSaleDto: UpdateSaleDto) {
     try {
-      return await this.salesModel
-      .findByIdAndUpdate({_id: id}, updateSaleDto)
-      .exec()    
-    } catch (error) {
-      console.log(error)
-    }        
+      const updateSale = await this.salesModel
+        .findByIdAndUpdate({ _id: id }, updateSaleDto, { returnDocument: 'after' })
+        .exec()
+      if (!updateSale) {
+        return {
+          message: 'No sale register matches this id'
+        }
+      } else {
+        return updateSale
+      }
+    } catch (error: any) {
+      if (error.path === "_id") {
+        return {
+          message: 'Invalid Id',
+          error
+        };
+      } else {
+        return {
+          message: 'Invalid updating data',
+          error
+        };
+      }
+    }
   }
 
   async remove(id: string) {
     try {
-      return await this.salesModel.findByIdAndDelete(id).exec()    
-    } catch (error) {
-      console.log(error)
-    }        
+      const removeSale = await this.salesModel.findByIdAndDelete(id).exec()
+      if (!removeSale) {
+        return {
+          message: 'No sale register matches this id'
+        }
+      } else {
+        return 'Sale register removed'
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
   }
 }

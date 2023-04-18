@@ -10,10 +10,10 @@ export class CitiesService {
     constructor(
         @InjectModel(City.name) private citiesModel: Model<City>) { }
 
-    async create(data: CreateCityDto) {
+    async create(createCityDto: CreateCityDto) {
         try {
             const newCity = await new this.citiesModel(
-                data,
+                createCityDto,
             ).save()
             return newCity
 
@@ -56,17 +56,17 @@ export class CitiesService {
         }
     }
 
-    async update(id: string, updateData: UpdateCityDto) {
+    async update(id: string, updateCity: UpdateCityDto) {
         try {
-            const updateCity = await this.citiesModel
-                .findOneAndUpdate({ _id: id }, updateData)
-                .exec()
+            const updatedCity = await this.citiesModel
+                .findByIdAndUpdate({_id: id}, updateCity, {returnDocument: 'after'})
+                .exec()                 
             if (!updateCity) {
                 return {
                     message: 'No city register matches this id'
                 }
-            } else {
-                return updateCity
+            } else {                
+                return updatedCity
             }
 
         } catch (error: any) {
@@ -95,7 +95,7 @@ export class CitiesService {
                     message: 'No city register matches this id'
                 }
             } else {
-                return removeCity
+                return 'City register removed'         
             }               
         } catch (error: any) {
             return {
