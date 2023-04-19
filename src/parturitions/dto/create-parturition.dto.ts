@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum } from "class-validator";
 import { Date } from "mongoose";
 import { User } from "src/user/entities/user.entities";
+import { FatherEnum } from "../entities/parturition.entity";
 
 export class CreateParturitionDto {
 
@@ -13,8 +15,9 @@ export class CreateParturitionDto {
     @ApiProperty({ type: String, required: false})
     matrix: string
 
-    @ApiProperty({ type: String, example:'Próprio', required: false})
-    father_owner: string
+    @IsEnum(FatherEnum)
+    @ApiProperty({ type: String, enum: FatherEnum, example:'Próprio', required: false})
+    father_owner: FatherEnum
 
     @ApiProperty({ type: String, example:'Bode1', required: false})
     father_name: string

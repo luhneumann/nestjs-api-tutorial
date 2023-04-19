@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger"
-import mongoose from "mongoose"
+import { IsEnum } from "class-validator"
 import { User } from "src/user/entities/user.entities"
+import { AnimalProperty, GenderEnum } from "../entities/animal.entity"
 
 export class CreateAnimalDto {
     @ApiProperty({type: String, required: false })
@@ -15,8 +16,9 @@ export class CreateAnimalDto {
     @ApiProperty({type: String, required: false})
     email: string
 
-    @ApiProperty({type: String, required: false})
-    gender: string    
+    @IsEnum(GenderEnum)
+    @ApiProperty({type: String, enum: GenderEnum, required: false})
+    gender: GenderEnum   
 
     @ApiProperty({type: String, required: false})
     category: string
@@ -38,18 +40,20 @@ export class CreateAnimalDto {
 
     @ApiProperty({type: String, required: false})
     attach_document: string
-
+    
     @ApiProperty({type: String, required: false})
     father_name: string
 
-    @ApiProperty({type: String, required: false})
+    @IsEnum(AnimalProperty)
+    @ApiProperty({type: String, enum: AnimalProperty, required: false})
     father_proper_animal: string
 
     @ApiProperty({type: String, required: false})
     mother_name: string
 
-    @ApiProperty({type: String, required: false})
-    mother_proper_animal: string
+    @IsEnum(AnimalProperty)
+    @ApiProperty({type: String, enum: AnimalProperty ,required: false})
+    mother_proper_animal: AnimalProperty
 
     @ApiProperty({type: String, required: false})
     register_name: string

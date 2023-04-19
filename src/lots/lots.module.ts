@@ -14,6 +14,7 @@ import { Lot, LotsSchema } from './entities/lot.entity';
     ]),
   ],
   controllers: [LotsController],
-  providers: [LotsService, LotsModule]
+  providers: [LotsService, LotsModule],
+  exports: [LotsModule, LotsService]
 })
 export class LotsModule {}

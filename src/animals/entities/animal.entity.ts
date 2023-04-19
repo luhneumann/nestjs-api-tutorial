@@ -3,6 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import mongoose from "mongoose";
 import { User } from "src/user/entities/user.entities";
 import { Document } from "mongoose";
+import { Farm } from "src/farm/entities/farm.entities";
 
 export enum GenderEnum {
     'Male' = 'Male',
@@ -20,6 +21,9 @@ export class Animal extends Document {
     
     @Prop({type: mongoose.Schema.Types.ObjectId, ref: User.name, required: false})
     user: User
+
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: Farm.name, required: false})
+    farm: Farm
 
     @Prop({type: String, required: false})
     identification_number: string

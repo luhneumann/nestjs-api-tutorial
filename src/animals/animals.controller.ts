@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Query } from '@nestjs/common';
 import { AnimalsService } from './animals.service';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ListAnimalDto } from './dto/list-animal.dto';
+import { Animal, GenderEnum } from './entities/animal.entity';
+import { query } from 'express';
 
 
 @ApiBearerAuth()
@@ -61,6 +63,57 @@ export class AnimalsController {
   async findOne(@Param('id') id: string) {
     return await this.animalsService.findOne(id);
   }
+
+  @Get('/farms/:farm_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    isArray: true,
+    type: ListAnimalDto
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({summary: 'Animals - Retorna um animal'})
+  async findByFarm(@Param('farm_id') farm_id: string) {
+    return await this.animalsService.findByFarm(farm_id);
+  }
+
+
+  @Get('/lots/:id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    isArray: true,
+    type: ListAnimalDto
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({summary: 'Animals - Retorna uma lista de animais presentes em um dado lote'})
+  async findByLot(@Param('id') id: string) {
+    return await this.animalsService.findByLot(id);
+  }
+
+  @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    isArray: true,
+    type: ListAnimalDto
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({summary: 'Animals - Retorna uma lista de animais de um gênero'})
+  async findFemale(@Query('gender') gender: string){
+    return await this.animalsService.findAll(gender);
+    
+  }
+
 
   
   @Put(':id')
