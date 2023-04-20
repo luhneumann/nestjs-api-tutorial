@@ -44,8 +44,25 @@ export class AnimalsController {
     description: 'Retorna mensagem de erro sobre os dados enviados',    
   })
   @ApiOperation({summary: 'Animals - Lista todos os animais'})
-  async findAll() {
-    return await this.animalsService.findAll();
+  async findAll(@Query('gender') gender: string) {
+    return await this.animalsService.findAll(gender);
+  }
+
+  
+  @Get('/out/:farm_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    isArray: true,
+    type: ListAnimalDto
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({summary: 'Animals - Retorna a quantidade de animais não alocados em lotes'})
+  async countAnimals(@Param('farm_id') farm_id: string){
+    return await this.animalsService.findAnimalsInNoLots(farm_id);
   }
 
   @Get(':id')
@@ -75,10 +92,12 @@ export class AnimalsController {
     status: 400,
     description: 'Retorna mensagem de erro sobre os dados enviados',    
   })
-  @ApiOperation({summary: 'Animals - Retorna um animal'})
+  @ApiOperation({summary: 'Animals - Retorna uma lista de animais'})
   async findByFarm(@Param('farm_id') farm_id: string) {
     return await this.animalsService.findByFarm(farm_id);
   }
+
+  
 
 
   @Get('/lots/:id')
@@ -97,24 +116,7 @@ export class AnimalsController {
     return await this.animalsService.findByLot(id);
   }
 
-  @Get()
-  @ApiResponse({
-    status: 200,
-    description: 'Retorna uma lista de objetos',
-    isArray: true,
-    type: ListAnimalDto
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Retorna mensagem de erro sobre os dados enviados',    
-  })
-  @ApiOperation({summary: 'Animals - Retorna uma lista de animais de um gênero'})
-  async findFemale(@Query('gender') gender: string){
-    return await this.animalsService.findAll(gender);
-    
-  }
-
-
+   
   
   @Put(':id')
   @ApiResponse({

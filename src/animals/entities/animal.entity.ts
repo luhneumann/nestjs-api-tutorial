@@ -15,8 +15,8 @@ export enum AnimalProperty {
     'Other' = 'Other'
 }
 
-@ApiTags('animals')
-@Schema({versionKey: false})
+
+@Schema({collection: 'animals',versionKey: false})
 export class Animal extends Document {
     
     @Prop({type: mongoose.Schema.Types.ObjectId, ref: User.name, required: false})

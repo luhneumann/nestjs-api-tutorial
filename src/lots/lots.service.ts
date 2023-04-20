@@ -60,6 +60,55 @@ export class LotsService {
     }
   }
 
+  async findLotsByFarm(farm_id: string) {
+    try {
+      const conditions = { farm: farm_id }
+      const findByFarm = await this.LotsModel
+        .find(conditions)
+        .exec();
+      if (!findByFarm) {
+        return {
+          message: 'No lots register at this farm'
+        }
+      } else {
+        return findByFarm
+      }
+    } catch (error: any) {
+      return {
+        message: 'Invalid Id',
+        error
+      }
+    }
+  }
+
+  async findLotsByFarmEspecial(farm_id: string) {
+
+    const conditions = { farm: farm_id }
+    const findByFarm = await this.LotsModel
+      .find(conditions)
+      .exec();
+
+    return findByFarm
+
+  }
+
+
+  async findAnimalsOnLots(farm_id: string) {
+    try {
+      const allLots = await this.findLotsByFarmEspecial(farm_id)      
+      const AnimalsList = new Set()
+
+      allLots.forEach(lot => {
+        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
+      })
+      
+      return AnimalsList.size
+
+    } catch (error: any) {
+      return error
+    }
+  }
+
   async update(id: string, updateLotDto: UpdateLotDto) {
     try {
       const updateLot = await this.LotsModel

@@ -6,13 +6,14 @@ import { Animal, GenderEnum } from './entities/animal.entity';
 import { Model } from 'mongoose';
 import { Farm } from 'src/farm/entities/farm.entities';
 import { LotsService } from 'src/lots/lots.service';
+import { Lot } from 'src/lots/entities/lot.entity';
 
 
 
 @Injectable()
 export class AnimalsService {
   constructor(@InjectModel(Animal.name) private animalModel: Model<Animal>,
-  public lotsService: LotsService) { }
+    public lotsService: LotsService) { }
 
   async create(createAnimalDto: CreateAnimalDto) {
     try {
@@ -29,13 +30,14 @@ export class AnimalsService {
 
   async findAll(gender?: string) {
     try {
-      if(!!gender){
-        let conditions = {gender: gender}
+      if (gender !== undefined && gender.length > 0) {
+        let conditions = { gender: gender }
+
         return await this.animalModel.find(conditions).exec()
       } else {
         return await this.animalModel.find().exec();
       }
-      
+
     } catch (error: any) {
       return {
         message: 'Search not found results',
@@ -85,19 +87,48 @@ export class AnimalsService {
     }
   }
 
+  async findByFarmSpecial(farm_id: string) {
+    
+      const conditions = { farm: farm_id }
+      const animalsByFarm = await this.animalModel
+        .find(conditions)
+        .exec()
+      return animalsByFarm
+    
+  }
+
+  async findAnimalsInNoLots(farm_id: string) {
+    try {
+      
+      const allAnimalsByFarm = await this.findByFarmSpecial(farm_id)
+      const animals = new Map()
+      
+      const animalsInNoLots = await this.lotsService.findAnimalsOnLots(farm_id)
+      console.log(allAnimalsByFarm)
+      console.log(animalsInNoLots)
+      
+    } catch (error: any) {
+      return {
+        message: 'Invalid farm_Id',
+        error
+      }
+    }
+  }
+
+
   async findByLot(id: string) {
     try {
-   
+
       const animalsByLot = await this.lotsService.findOne(id)
-      
+
       if (!animalsByLot) {
         return {
           message: 'No lot register matches this id'
         }
       } else {
-       return animalsByLot['animals']
+        return animalsByLot['animals']
       }
-    } catch (error: any) {    
+    } catch (error: any) {
       return {
         message: 'Invalid lot_Id',
         error
@@ -105,7 +136,27 @@ export class AnimalsService {
     }
   }
 
-  
+  /*async findAnimalsLotQuantity(farm_id: string) {
+    try {      
+      const allLots = await this.lotsService.findLotsByFarm(farm_id)
+      console.log(allLots)
+
+     
+
+      const AnimalsList = new Set<string[]>()
+      allLots.forEach(lot => {
+        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
+      })  
+      console.log(AnimalsList.size, 'animal')
+      return AnimalsList.size 
+
+
+    } catch (error: any) {
+      return error
+    }
+  }*/
+
+
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
     try {
