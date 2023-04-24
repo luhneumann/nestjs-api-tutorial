@@ -4,9 +4,8 @@ import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Animal, GenderEnum } from './entities/animal.entity';
 import { Model } from 'mongoose';
-import { Farm } from 'src/farm/entities/farm.entities';
 import { LotsService } from 'src/lots/lots.service';
-import { Lot } from 'src/lots/entities/lot.entity';
+
 
 
 
@@ -66,7 +65,7 @@ export class AnimalsService {
     }
   }
 
-  async findByFarm(farm_id: string) {
+  async findAnimalsByFarm(farm_id: string) {
     try {
       const conditions = { farm: farm_id }
       const animalsByFarm = await this.animalModel
@@ -88,25 +87,26 @@ export class AnimalsService {
   }
 
   async findByFarmSpecial(farm_id: string) {
-    
-      const conditions = { farm: farm_id }
-      const animalsByFarm = await this.animalModel
-        .find(conditions)
-        .exec()
-      return animalsByFarm
-    
+
+    const conditions = { farm: farm_id }
+    const animalsByFarm = await this.animalModel
+      .find(conditions)
+      .exec();
+
+    return animalsByFarm
+
   }
 
-  async findAnimalsInNoLots(farm_id: string) {
+  async findFarmAnimalQuantity(farm_id: string) {
     try {
-      
+
       const allAnimalsByFarm = await this.findByFarmSpecial(farm_id)
-      const animals = new Map()
-      
-      const animalsInNoLots = await this.lotsService.findAnimalsOnLots(farm_id)
-      console.log(allAnimalsByFarm)
-      console.log(animalsInNoLots)
-      
+      const farmAnimalsQuantity = new Set()
+
+      allAnimalsByFarm.forEach(animal => { farmAnimalsQuantity.add(animal) })
+
+      return farmAnimalsQuantity.size
+
     } catch (error: any) {
       return {
         message: 'Invalid farm_Id',
@@ -115,6 +115,52 @@ export class AnimalsService {
     }
   }
 
+  async findLotsAnimalQty(farm_id: string) {
+    try {
+      const allLots = await this.lotsService.findLotsByFarmEspecial(farm_id)
+      const AnimalsList = new Set()
+
+      allLots.forEach(lot => {
+        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
+      })
+
+      return AnimalsList.size
+
+    } catch (error: any) {
+      return {
+        message: 'Invalid farm_Id',
+        error
+      }
+    }
+  }
+
+  async findNoLotsAnimals(farm_id: string) {
+    try {
+
+      const farmAnimals: any[] = await this.findByFarmSpecial(farm_id)
+      const lotsAnimals: any[] = await this.lotsService.findLotsByFarmEspecial(farm_id)
+
+      const inNoLots = new Set<string>();
+
+      farmAnimals.forEach((animal) => {
+        const idAnimal = animal._id;
+
+        lotsAnimals.forEach((lot) => {
+          const lotAnimals = lot.animals;
+
+          if (!lotAnimals.includes(idAnimal)) {
+            inNoLots.add(idAnimal)
+          }
+        })
+      })
+      return inNoLots.size
+    } catch (error: any) {
+      return {
+        message: 'Invalid farm_Id',
+        error
+      }
+    }
+  }
 
   async findByLot(id: string) {
     try {
@@ -135,28 +181,6 @@ export class AnimalsService {
       }
     }
   }
-
-  /*async findAnimalsLotQuantity(farm_id: string) {
-    try {      
-      const allLots = await this.lotsService.findLotsByFarm(farm_id)
-      console.log(allLots)
-
-     
-
-      const AnimalsList = new Set<string[]>()
-      allLots.forEach(lot => {
-        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
-      })  
-      console.log(AnimalsList.size, 'animal')
-      return AnimalsList.size 
-
-
-    } catch (error: any) {
-      return error
-    }
-  }*/
-
-
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
     try {

@@ -2,6 +2,8 @@ import { ApiProperty } from "@nestjs/swagger"
 import { IsEnum } from "class-validator"
 import { User } from "src/user/entities/user.entities"
 import { AnimalProperty, GenderEnum } from "../entities/animal.entity"
+import { Transform } from "class-transformer"
+
 
 export class CreateAnimalDto {
     @ApiProperty({type: String, required: false })
@@ -15,7 +17,7 @@ export class CreateAnimalDto {
 
     @ApiProperty({type: String, required: false})
     email: string
-
+    
     @IsEnum(GenderEnum)
     @ApiProperty({type: String, enum: GenderEnum, required: false})
     gender: GenderEnum   
