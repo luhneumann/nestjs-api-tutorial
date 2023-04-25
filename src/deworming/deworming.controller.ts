@@ -45,6 +45,39 @@ export class DewormingController {
     return this.dewormingService.findAll();
   }
 
+  @Get('/animal/:animal_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListDewormingDto,
+    isArray: true
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma resposta de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Deworming - retorna os registros de vermifugação de um animal'})  
+  async findByAnimal(@Param('animal_id') animal_id: string) {
+    return await this.dewormingService.findDewormingsByAnimals(animal_id);
+  }
+
+  @Get('/last/:animal_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListDewormingDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma resposta de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Deworming - retorna o registro de vermifugação mais recente de um animal'})  
+  async lastDeworming(@Param('animal_id') animal_id: string) {
+    return await this.dewormingService.dewormingIndicatorFilter(animal_id);
+  }
+
+
   @Get(':id')
   @ApiResponse({
     status: 200,

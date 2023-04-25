@@ -14,6 +14,9 @@ export class CreateVaccinationDto {
     @ApiProperty({ type: String, required: false })
     lot: Lot
 
+    @ApiProperty({type: Date, required: false})
+    date: Date
+
     @ApiProperty({ type: String, required: false })
     category: string
 

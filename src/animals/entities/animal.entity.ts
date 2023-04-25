@@ -44,7 +44,7 @@ export class Animal extends Document {
     category: string
 
     @Prop({type: String, required: false})
-    date_of_birth: Date
+    birth_date: Date
 
     @Prop({type: String, required: false})
     race: string

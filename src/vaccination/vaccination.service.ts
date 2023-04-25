@@ -51,6 +51,47 @@ export class VaccinationService {
     }
   }
 
+  async findVaccinesByAnimals(animal_id: string) {
+    try {
+      const conditions = { animal: animal_id }
+      const animalVaccinationInputs: Array<any> = await this.vaccinationModel.find(conditions).exec()
+      return animalVaccinationInputs
+
+    } catch (error: unknown) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
+
+    }
+  }
+
+  async findVaccinesByAnimalsSpecial(animal_id: string) {
+
+    const conditions = { animal: animal_id }
+    const animalVaccinationInputs: Array<any> = await this.vaccinationModel.find(conditions).exec()
+    return animalVaccinationInputs
+  }
+
+  async vaccineIndicatorFilter(animal_id: string) {
+    try {
+      const animalVaccination = await this.findVaccinesByAnimalsSpecial(animal_id)
+      const allInput = animalVaccination.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      })      
+      console.log(allInput)
+      const lastVaccine = allInput.map((item) => item.vaccine)      
+
+      return lastVaccine[0]       
+
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
+    }
+  }
+
   async findOne(id: string) {
     try {
       const findOneVaccination = await this.vaccinationModel
@@ -105,7 +146,7 @@ export class VaccinationService {
       const removeVaccinationRegister = await this.vaccinationModel
         .findByIdAndRemove(id)
         .exec()
-      if(!removeVaccinationRegister){
+      if (!removeVaccinationRegister) {
         return {
           message: 'No vaccination register matches this id'
         }

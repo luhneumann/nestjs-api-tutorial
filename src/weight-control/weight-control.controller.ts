@@ -61,6 +61,38 @@ export class WeightControlController {
     return await this.weightControlService.findOne(id);
   }
 
+  @Get('/animal/:animal_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    type: ListWeightControlDto,
+    isArray: true
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({summary: 'Weight-Control - Retorna uma lista de registros de peso de um animal'})
+  async findByAnimal(@Param('animal_id') animal_id: string) {
+    return await this.weightControlService.findWeightByAnimals(animal_id);
+  }
+
+  @Get('/last/:animal_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    type: ListWeightControlDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma mensagem de erro sobre os dados enviados'
+  })
+  @ApiOperation({summary: 'Weight-Control - Retorna uma lista de registros de peso de um animal'})
+  async lastAnimalWeight(@Param('animal_id') animal_id: string) {
+    return await this.weightControlService.weightIndicatorFilter(animal_id);
+  }
+
   @Put(':id')
   @ApiResponse({
     status: 200,

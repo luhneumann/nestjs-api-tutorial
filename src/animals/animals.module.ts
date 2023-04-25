@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Animal, AnimalSchema } from './entities/animal.entity';
 import { LotsService } from 'src/lots/lots.service';
 import { LotsModule } from 'src/lots/lots.module';
+import { WeightControlModule } from 'src/weight-control/weight-control.module';
+import { DewormingModule } from 'src/deworming/deworming.module';
 
 @Module({
   imports:[
@@ -14,7 +16,9 @@ import { LotsModule } from 'src/lots/lots.module';
           schema: AnimalSchema
       }      
   ]),
-  LotsModule
+  LotsModule,
+  WeightControlModule,
+  DewormingModule
   ],
   controllers: [AnimalsController],
   providers: [AnimalsService],

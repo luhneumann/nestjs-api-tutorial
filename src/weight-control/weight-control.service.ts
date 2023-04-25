@@ -68,6 +68,47 @@ export class WeightControlService {
     }
   }
 
+  async findWeightByAnimals(animal_id: string){
+    try {
+      const conditions = {animal: animal_id}
+      const animalWeightInputs: Array<any> = await this.weightControlModel.find(conditions).exec()
+      return animalWeightInputs
+
+    } catch (error: unknown) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };     
+      
+    }
+  }
+
+  async findWeightByAnimalsSpecial(animal_id: string){
+    
+      const conditions = {animal: animal_id}
+      const animalWeightInputs: Array<any> = await this.weightControlModel.find(conditions).exec()
+      return animalWeightInputs
+  }
+
+  async weightIndicatorFilter(animal_id: string) {
+    try {     
+      const animalWeightControl = await this.findWeightByAnimalsSpecial(animal_id)
+      const allInput = animalWeightControl.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      })
+      
+      const animalWeight = allInput.map((item) => item.animal_weight)
+      
+      return animalWeight[0]  
+      
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };     
+    }
+  }
+
   async update(id: string, updateWeightControlDto: UpdateWeightControlDto) {
     try {
       const updateWeightControl = await this.weightControlModel

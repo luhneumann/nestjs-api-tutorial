@@ -5,6 +5,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Animal, GenderEnum } from './entities/animal.entity';
 import { Model } from 'mongoose';
 import { LotsService } from 'src/lots/lots.service';
+import { WeightControlService } from 'src/weight-control/weight-control.service';
+import { DewormingService } from 'src/deworming/deworming.service';
+import { differenceInYears } from 'date-fns';
 
 
 
@@ -12,12 +15,19 @@ import { LotsService } from 'src/lots/lots.service';
 @Injectable()
 export class AnimalsService {
   constructor(@InjectModel(Animal.name) private animalModel: Model<Animal>,
-    public lotsService: LotsService) { }
+    public lotsService: LotsService,
+    public weightControlService: WeightControlService,
+    public dewormingService: DewormingService) { }
 
   async create(createAnimalDto: CreateAnimalDto) {
     try {
-      const newAnimal = await new this.animalModel(createAnimalDto).save();
-      return newAnimal;
+      const sendAnimal = Object.assign(
+        {...createAnimalDto},
+        { age: this.calculateAge(new Date(createAnimalDto.birth_date)) },
+      );
+
+      const newAnimal = await new this.animalModel(sendAnimal).save();
+      return this.findOne(newAnimal._id.toString());
 
     } catch (error: any) {
       return {
@@ -180,7 +190,7 @@ export class AnimalsService {
         error
       }
     }
-  }
+  }   
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
     try {
@@ -230,5 +240,10 @@ export class AnimalsService {
         error
       }
     }
+  }
+
+  calculateAge(birthdate: Date): string {
+    const today = new Date();
+    return differenceInYears(today, birthdate).toString();
   }
 }

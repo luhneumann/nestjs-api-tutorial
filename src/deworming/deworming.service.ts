@@ -66,6 +66,45 @@ export class DewormingService {
     }
   }
 
+  async findDewormingsByAnimals(animal_id: string){
+    try {
+      const conditions = {animal: animal_id}
+      const animalDewormingInputs: Array<any> = await this.dewormingModel.find(conditions).exec()
+      return animalDewormingInputs
+
+    } catch (error: unknown) {
+      let message: 'Invalid animal_id'
+      return ({message, error})  
+      
+    }
+  }
+
+  async findDewormingsByAnimalsSpecial(animal_id: string){
+    
+      const conditions = {animal: animal_id}
+      const animalDewormingInputs: Array<any> = await this.dewormingModel.find(conditions).exec()
+      return animalDewormingInputs
+  }
+
+  async dewormingIndicatorFilter(animal_id: string){
+    try {     
+      const animalDeworming = await this.findDewormingsByAnimalsSpecial(animal_id)
+      const lastInput = animalDeworming.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      })
+      console.log(lastInput)
+      const activeIngredient = lastInput.map((item) => item.active_ingredient)
+      
+      return activeIngredient[0]             
+      
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      }
+    }
+  }
+
   async update(id: string, updateDewormingDto: UpdateDewormingDto) {
     try {
       const updateDeworming = await this.dewormingModel
