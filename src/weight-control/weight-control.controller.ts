@@ -90,7 +90,7 @@ export class WeightControlController {
   })
   @ApiOperation({summary: 'Weight-Control - Retorna uma lista de registros de peso de um animal'})
   async lastAnimalWeight(@Param('animal_id') animal_id: string) {
-    return await this.weightControlService.weightIndicatorFilter(animal_id);
+    return await this.weightControlService.findlastWeightRegister(animal_id);
   }
 
   @Put(':id')

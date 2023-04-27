@@ -90,8 +90,7 @@ export class LotsService {
 
     return findByFarm
 
-  } 
-  
+  }   
 
   async update(id: string, updateLotDto: UpdateLotDto) {
     try {

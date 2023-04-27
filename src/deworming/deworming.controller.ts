@@ -74,9 +74,24 @@ export class DewormingController {
   })
   @ApiOperation({ summary: 'Deworming - retorna o registro de vermifugação mais recente de um animal'})  
   async lastDeworming(@Param('animal_id') animal_id: string) {
-    return await this.dewormingService.dewormingIndicatorFilter(animal_id);
+    return await this.dewormingService.findlastDeworming(animal_id);
   }
 
+  @Get('/days/:animal_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListDewormingDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma resposta de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Vaccination - retorna o número de dias desde a última vacina'})  
+  async daysFromLastDeworming(@Param('animal_id') animal_id: string) {
+    return await this.dewormingService.daysFromLastDeworming(animal_id);
+  }
 
   @Get(':id')
   @ApiResponse({

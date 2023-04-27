@@ -81,31 +81,28 @@ export class WeightControlService {
       };     
       
     }
-  }
+  }  
 
-  async findWeightByAnimalsSpecial(animal_id: string){
-    
-      const conditions = {animal: animal_id}
-      const animalWeightInputs: Array<any> = await this.weightControlModel.find(conditions).exec()
-      return animalWeightInputs
-  }
+  async findlastWeightRegister(animal_id: string) {
+    try {
+      const conditions = { animal: animal_id }
+      const lastWeight = await this.weightControlModel.find(conditions)
+        .sort({ date: -1 })   
+        .limit(1)          
 
-  async weightIndicatorFilter(animal_id: string) {
-    try {     
-      const animalWeightControl = await this.findWeightByAnimalsSpecial(animal_id)
-      const allInput = animalWeightControl.sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      })
-      
-      const animalWeight = allInput.map((item) => item.animal_weight)
-      
-      return animalWeight[0]  
-      
+      if (lastWeight.length > 0) {
+        return lastWeight;
+      } else {
+        return {
+          message: 'There is no weight register to this animal'
+        }
+      }
+
     } catch (error: any) {
       return {
         message: 'Invalid animal_id',
         error
-      };     
+      };
     }
   }
 

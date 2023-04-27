@@ -77,6 +77,22 @@ export class VaccinationController {
     return await this.vaccinationService.vaccineIndicatorFilter(animal_id);
   }
 
+  @Get('/days/:animal_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna um objeto',
+    type: ListVaccinationDto,
+    isArray: false
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna uma resposta de erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Vaccination - retorna o número de dias desde a última vacina'})  
+  async daysFromLastVaccine(@Param('animal_id') animal_id: string) {
+    return await this.vaccinationService.daysFromLastVaccination(animal_id);
+  }
+  
   @Get(':id')
   @ApiResponse({
     status: 200,
