@@ -172,25 +172,7 @@ export class AnimalsService {
     }
   }
 
-  async findByLot(id: string) {
-    try {
-
-      const animalsByLot = await this.lotsService.findOne(id)
-
-      if (!animalsByLot) {
-        return {
-          message: 'No lot register matches this id'
-        }
-      } else {
-        return animalsByLot['animals']
-      }
-    } catch (error: any) {
-      return {
-        message: 'Invalid lot_Id',
-        error
-      }
-    }
-  }   
+  
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
     try {

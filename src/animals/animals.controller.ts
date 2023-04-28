@@ -97,22 +97,6 @@ export class AnimalsController {
   @ApiOperation({summary: 'Animals - Retorna uma lista de animais cadstrados em uma determinada farm'})
   async findByFarm(@Param('farm_id') farm_id: string) {
     return await this.animalsService.findAnimalsByFarm(farm_id);
-  } 
-
-  @Get('/lots/:id')
-  @ApiResponse({
-    status: 200,
-    description: 'Retorna uma lista de objetos',
-    isArray: true,
-    type: ListAnimalDto
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Retorna mensagem de erro sobre os dados enviados',    
-  })
-  @ApiOperation({summary: 'Animals - Retorna uma lista de animais presentes em um dado lote'})
-  async findByLot(@Param('id') id: string) {
-    return await this.animalsService.findByLot(id);
   }   
 
   @Get('/nolots/:farm_id')

@@ -5,9 +5,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { WeightControl } from './entities/weight-control.entity';
 import { Model } from 'mongoose';
 
+
 @Injectable()
 export class WeightControlService {
-  constructor(@InjectModel(WeightControl.name) private readonly weightControlModel: Model<WeightControl>){}
+  constructor(@InjectModel(WeightControl.name)
+  private readonly weightControlModel: Model<WeightControl>){}
 
   async create(createWeightControlDto: CreateWeightControlDto) {
     try {
@@ -81,7 +83,7 @@ export class WeightControlService {
       };     
       
     }
-  }  
+  }    
 
   async findlastWeightRegister(animal_id: string) {
     try {

@@ -42,6 +42,22 @@ export class LotsController {
   @ApiOperation({ summary: 'Lots - Retorna todos os lotes'})
   async findAll() {
     return await this.lotsService.getAll();
+  } 
+
+
+  @Get('/weight/:id')
+  @ApiResponse({
+    status: 200,
+    type: ListLotDto,
+    description: 'Retorna todos objetos'
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Lots - Retorna todos os lotes'})
+  async lotsAndWeightAnimalsl(@Param('id') id: string) {
+    return await this.lotsService.joinLotAndWeight(id);
   }
 
   @Get('farm/:farm_id')
