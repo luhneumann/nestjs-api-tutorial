@@ -101,8 +101,9 @@ export class AnimalsService {
     try {
       
       const allAnimalsByFarm = await this.findByFarmSpecial(farm_id)
-      const animals = new Map()
+      const animals = new Set()
       
+      allAnimalsByFarm.forEach(animal => {animal._id.forEach(_id)} )
       const animalsInNoLots = await this.lotsService.findAnimalsOnLots(farm_id)
       console.log(allAnimalsByFarm)
       console.log(animalsInNoLots)
