@@ -13,9 +13,14 @@ export class VaccinationService {
 
   async create(createVaccinationDto: CreateVaccinationDto) {
     try {
-      const newVaccination = await new this.vaccinationModel(createVaccinationDto)
-        .save()
-      return newVaccination
+      const newVaccination = await new this.vaccinationModel(createVaccinationDto).save() 
+      const dateFormat = new Date(newVaccination.date).toJSON();
+
+      console.log(dateFormat)
+
+      const responseData = {...createVaccinationDto, date: dateFormat}    
+        
+      return responseData
 
     } catch (error: any) {
       return {
@@ -48,6 +53,88 @@ export class VaccinationService {
         message: 'Invalid management_Id',
         error
       }
+    }
+  }
+
+  async findVaccinesByAnimals(animal_id: string) {
+    try {
+      const conditions = { animal: animal_id }
+      const animalVaccinationInputs: Array<any> = await this.vaccinationModel.find(conditions).exec()
+      return animalVaccinationInputs
+
+    } catch (error: unknown) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
+
+    }
+  }
+
+  async findVaccinesByAnimalsSpecial(animal_id: string) {
+
+    const conditions = { animal: animal_id }
+    const animalVaccinationInputs: Array<any> = await this.vaccinationModel.find(conditions).exec()
+    return animalVaccinationInputs
+  }
+
+  async vaccineIndicatorFilter(animal_id: string) {
+    try {
+      const animalVaccination = await this.findVaccinesByAnimalsSpecial(animal_id)
+      const allInput = animalVaccination.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      })      
+      /*console.log(allInput)
+      const lastVaccine = allInput.map((item) => item.vaccine)*/      
+
+      return allInput[0]       
+
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
+    }
+  }
+
+  async findByDate(animal_id: string): Promise<any> {
+    try {
+      const conditions = { animal: animal_id }
+      const lastVaccine = await this.vaccinationModel.find(conditions)
+        .sort({ date: -1 })
+        .limit(1)       
+
+      if (lastVaccine.length > 0) {
+        return lastVaccine;
+      } else {
+        return {
+          message: 'There is no deworming register to this animal'
+        }
+      }
+
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
+    }
+  }
+
+
+  async daysFromLastVaccination(animal_id: string) {
+    try {
+      const lastVaccine = await this.findByDate(animal_id);
+      const currentDate = new Date();
+      const pastDate = new Date(lastVaccine[0].date)
+      const timeDiff = currentDate.getTime() - pastDate.getTime();
+      const daysDiff = Math.floor(timeDiff/(1000 * 3600 * 24));
+
+      return `${daysDiff} dias`
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
     }
   }
 
@@ -105,7 +192,7 @@ export class VaccinationService {
       const removeVaccinationRegister = await this.vaccinationModel
         .findByIdAndRemove(id)
         .exec()
-      if(!removeVaccinationRegister){
+      if (!removeVaccinationRegister) {
         return {
           message: 'No vaccination register matches this id'
         }

@@ -43,13 +43,31 @@ export class AnimalsController {
     status: 400,
     description: 'Retorna mensagem de erro sobre os dados enviados',    
   })
-  @ApiOperation({summary: 'Animals - Lista todos os animais'})
+  @ApiOperation({summary: 'Animals - Lista os animais pelo parâmetro gênero ou todos animais cadastrados'})
   async findAll(@Query('gender') gender: string) {
     return await this.animalsService.findAll(gender);
   }
+ 
 
+  @Get('/lots/qty/:farm_id')
+  @ApiResponse({
+    status: 200,
+    type: ListAnimalDto,
+    isArray: true,
+    description: 'Retorna uma lista de objetos'
+  })
+  @ApiResponse({
+    status: 400,
+    isArray: false,
+    type: ListAnimalDto,
+    description: 'Retorna erro sobre os dados enviados'
+  })
+  @ApiOperation({ summary: 'Lots - Retorna a quantidade de animais alocados em lotes'})
+  async animalsOnLots(@Param('farm_id') farm_id: string) {
+    return await this.animalsService.findLotsAnimalQty(farm_id);
+  }
   
-  @Get('/out/:farm_id')
+  @Get('/farm/qty/:farm_id')
   @ApiResponse({
     status: 200,
     description: 'Retorna uma lista de objetos',
@@ -60,10 +78,42 @@ export class AnimalsController {
     status: 400,
     description: 'Retorna mensagem de erro sobre os dados enviados',    
   })
-  @ApiOperation({summary: 'Animals - Retorna a quantidade de animais não alocados em lotes'})
+  @ApiOperation({summary: 'Animals - Retorna a quantidade de animais registrados em uma farm'})
   async countAnimals(@Param('farm_id') farm_id: string){
-    return await this.animalsService.findAnimalsInNoLots(farm_id);
-  }
+    return await this.animalsService.findFarmAnimalQuantity(farm_id);
+  } 
+
+  @Get('/farm/:farm_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    isArray: true,
+    type: ListAnimalDto
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({summary: 'Animals - Retorna uma lista de animais cadstrados em uma determinada farm'})
+  async findByFarm(@Param('farm_id') farm_id: string) {
+    return await this.animalsService.findAnimalsByFarm(farm_id);
+  }   
+
+  @Get('/nolots/:farm_id')
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna uma lista de objetos',
+    isArray: true,
+    type: ListAnimalDto
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Retorna mensagem de erro sobre os dados enviados',    
+  })
+  @ApiOperation({summary: 'Animals - Retorna uma lista de animais presentes em um dado lote'})
+  async findNoLotsAnimals(@Param('farm_id') farm_id: string) {
+    return await this.animalsService.findNoLotsAnimals(farm_id);
+  }     
 
   @Get(':id')
   @ApiResponse({
@@ -76,47 +126,10 @@ export class AnimalsController {
     status: 400,
     description: 'Retorna mensagem de erro sobre os dados enviados',    
   })
-  @ApiOperation({summary: 'Animals - Retorna um animal'})
+  @ApiOperation({summary: 'Animals - Retorna um animal pelo seu id'})
   async findOne(@Param('id') id: string) {
     return await this.animalsService.findOne(id);
   }
-
-  @Get('/farms/:farm_id')
-  @ApiResponse({
-    status: 200,
-    description: 'Retorna uma lista de objetos',
-    isArray: true,
-    type: ListAnimalDto
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Retorna mensagem de erro sobre os dados enviados',    
-  })
-  @ApiOperation({summary: 'Animals - Retorna uma lista de animais'})
-  async findByFarm(@Param('farm_id') farm_id: string) {
-    return await this.animalsService.findByFarm(farm_id);
-  }
-
-  
-
-
-  @Get('/lots/:id')
-  @ApiResponse({
-    status: 200,
-    description: 'Retorna uma lista de objetos',
-    isArray: true,
-    type: ListAnimalDto
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Retorna mensagem de erro sobre os dados enviados',    
-  })
-  @ApiOperation({summary: 'Animals - Retorna uma lista de animais presentes em um dado lote'})
-  async findByLot(@Param('id') id: string) {
-    return await this.animalsService.findByLot(id);
-  }
-
-   
   
   @Put(':id')
   @ApiResponse({

@@ -6,13 +6,13 @@ import { Document } from "mongoose";
 import { Farm } from "src/farm/entities/farm.entities";
 
 export enum GenderEnum {
-    'Male' = 'Male',
-    'Female' = 'Female'
+    'male' = 'male',
+    'female' = 'female'
 }
 
 export enum AnimalProperty {
-    'Own' = 'Own',
-    'Other' = 'Other'
+    'own' = 'own',
+    'other' = 'other'
 }
 
 
@@ -37,14 +37,14 @@ export class Animal extends Document {
     @Prop({type: String, required: false})
     email: string
 
-    @Prop({type: String, enum: GenderEnum, default: GenderEnum.Female, required: false})
+    @Prop({type: String, enum: GenderEnum, default: GenderEnum.female, required: false})
     gender: string
 
     @Prop({type: String, required: false})
     category: string
 
     @Prop({type: String, required: false})
-    date_of_birth: Date
+    birth_date: Date
 
     @Prop({type: String, required: false})
     race: string
@@ -61,13 +61,13 @@ export class Animal extends Document {
     @Prop({type: String, required: false})
     father_name: string
 
-    @Prop({type: String, enum: AnimalProperty, default: AnimalProperty.Own, required: false})
+    @Prop({type: String, enum: AnimalProperty, default: AnimalProperty.own, required: false})
     father_proper_animal: string
 
     @Prop({type: String, required: false})
     mother_name: string
 
-    @Prop({type: String, enum: AnimalProperty, default: AnimalProperty.Own, required: false})
+    @Prop({type: String, enum: AnimalProperty, default: AnimalProperty.own, required: false})
     mother_proper_animal: string
 
     @Prop({type: String, required: false})

@@ -3,7 +3,9 @@ import { CreateLotDto } from './dto/create-lot.dto';
 import { UpdateLotDto } from './dto/update-lot.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Lot } from './entities/lot.entity';
-import { Model } from 'mongoose';
+import { Aggregate, Model } from 'mongoose';
+import { WeightControl } from 'src/weight-control/entities/weight-control.entity';
+
 
 @Injectable()
 export class LotsService {
@@ -11,8 +13,8 @@ export class LotsService {
 
   async create(createLotDto: CreateLotDto) {
     try {
-      const newLot = await new this.LotsModel(createLotDto)
-        .save()
+      const newLot = await new this.LotsModel(createLotDto)        
+        .save()        
       return newLot
 
     } catch (error: any) {
@@ -27,6 +29,7 @@ export class LotsService {
     try {
       const findAllLots = await this.LotsModel
         .find()
+        .populate('animals')
         .exec();
       if (!findAllLots) {
         return {
@@ -44,6 +47,7 @@ export class LotsService {
     try {
       const findOneLot = await this.LotsModel
         .findById(id)
+        .populate('animals')        
         .exec();
       if (!findOneLot) {
         return {
@@ -65,6 +69,7 @@ export class LotsService {
       const conditions = { farm: farm_id }
       const findByFarm = await this.LotsModel
         .find(conditions)
+        .populate('animals')
         .exec();
       if (!findByFarm) {
         return {
@@ -73,6 +78,7 @@ export class LotsService {
       } else {
         return findByFarm
       }
+
     } catch (error: any) {
       return {
         message: 'Invalid Id',
@@ -90,24 +96,29 @@ export class LotsService {
 
     return findByFarm
 
-  }
+  }   
 
-
-  async findAnimalsOnLots(farm_id: string) {
-    try {
-      const allLots = await this.findLotsByFarmEspecial(farm_id)      
-      const AnimalsList = new Set()
-
-      allLots.forEach(lot => {
-        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
-      })
-      
-      return AnimalsList.size
+  async joinLotAndWeight(id: string){
+    try {     
+      const lot = await this.LotsModel.aggregate([         
+        { $lookup: 
+          {   
+            from: "weightcontrols",
+            localField: "animals",
+            foreignField: "animal",
+            as: "weight_control"
+          },          
+        },        
+      ])
+      const byLotIdFilter = lot.filter((lot) => lot._id == id)
+      return byLotIdFilter
 
     } catch (error: any) {
-      return error
+      
     }
   }
+
+
 
   async update(id: string, updateLotDto: UpdateLotDto) {
     try {

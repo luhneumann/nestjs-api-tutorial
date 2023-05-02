@@ -5,9 +5,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { WeightControl } from './entities/weight-control.entity';
 import { Model } from 'mongoose';
 
+
 @Injectable()
 export class WeightControlService {
-  constructor(@InjectModel(WeightControl.name) private readonly weightControlModel: Model<WeightControl>){}
+  constructor(@InjectModel(WeightControl.name)
+  private readonly weightControlModel: Model<WeightControl>){}
 
   async create(createWeightControlDto: CreateWeightControlDto) {
     try {
@@ -65,6 +67,44 @@ export class WeightControlService {
         message: 'Invalid management_Id',
         error
       }
+    }
+  }
+
+  async findWeightByAnimals(animal_id: string){
+    try {
+      const conditions = {animal: animal_id}
+      const animalWeightInputs: Array<any> = await this.weightControlModel.find(conditions).exec()
+      return animalWeightInputs
+
+    } catch (error: unknown) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };     
+      
+    }
+  }    
+
+  async findlastWeightRegister(animal_id: string) {
+    try {
+      const conditions = { animal: animal_id }
+      const lastWeight = await this.weightControlModel.find(conditions)
+        .sort({ date: -1 })   
+        .limit(1)          
+
+      if (lastWeight.length > 0) {
+        return lastWeight;
+      } else {
+        return {
+          message: 'There is no weight register to this animal'
+        }
+      }
+
+    } catch (error: any) {
+      return {
+        message: 'Invalid animal_id',
+        error
+      };
     }
   }
 

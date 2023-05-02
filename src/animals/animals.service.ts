@@ -4,21 +4,30 @@ import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Animal, GenderEnum } from './entities/animal.entity';
 import { Model } from 'mongoose';
-import { Farm } from 'src/farm/entities/farm.entities';
 import { LotsService } from 'src/lots/lots.service';
-import { Lot } from 'src/lots/entities/lot.entity';
+import { WeightControlService } from 'src/weight-control/weight-control.service';
+import { DewormingService } from 'src/deworming/deworming.service';
+import { differenceInYears } from 'date-fns';
+
 
 
 
 @Injectable()
 export class AnimalsService {
   constructor(@InjectModel(Animal.name) private animalModel: Model<Animal>,
-    public lotsService: LotsService) { }
+    public lotsService: LotsService,
+    public weightControlService: WeightControlService,
+    public dewormingService: DewormingService) { }
 
   async create(createAnimalDto: CreateAnimalDto) {
     try {
-      const newAnimal = await new this.animalModel(createAnimalDto).save();
-      return newAnimal;
+      const sendAnimal = Object.assign(
+        {...createAnimalDto},
+        { age: this.calculateAge(new Date(createAnimalDto.birth_date)) },
+      );
+
+      const newAnimal = await new this.animalModel(sendAnimal).save();
+      return this.findOne(newAnimal._id.toString());
 
     } catch (error: any) {
       return {
@@ -66,7 +75,7 @@ export class AnimalsService {
     }
   }
 
-  async findByFarm(farm_id: string) {
+  async findAnimalsByFarm(farm_id: string) {
     try {
       const conditions = { farm: farm_id }
       const animalsByFarm = await this.animalModel
@@ -88,19 +97,21 @@ export class AnimalsService {
   }
 
   async findByFarmSpecial(farm_id: string) {
-    
-      const conditions = { farm: farm_id }
-      const animalsByFarm = await this.animalModel
-        .find(conditions)
-        .exec()
-      return animalsByFarm
-    
+
+    const conditions = { farm: farm_id }
+    const animalsByFarm = await this.animalModel
+      .find(conditions)
+      .exec();
+
+    return animalsByFarm
+
   }
 
-  async findAnimalsInNoLots(farm_id: string) {
+  async findFarmAnimalQuantity(farm_id: string) {
     try {
-      
+
       const allAnimalsByFarm = await this.findByFarmSpecial(farm_id)
+<<<<<<< HEAD
       const animals = new Set()
       
       allAnimalsByFarm.forEach(animal => {animal._id.forEach(_id)} )
@@ -108,6 +119,14 @@ export class AnimalsService {
       console.log(allAnimalsByFarm)
       console.log(animalsInNoLots)
       
+=======
+      const farmAnimalsQuantity = new Set()
+
+      allAnimalsByFarm.forEach(animal => { farmAnimalsQuantity.add(animal) })
+
+      return farmAnimalsQuantity.size
+
+>>>>>>> 863d1f230e358bcbe16a79d408508e72b652693f
     } catch (error: any) {
       return {
         message: 'Invalid farm_Id',
@@ -116,48 +135,54 @@ export class AnimalsService {
     }
   }
 
-
-  async findByLot(id: string) {
+  async findLotsAnimalQty(farm_id: string) {
     try {
+      const allLots = await this.lotsService.findLotsByFarmEspecial(farm_id)
+      const AnimalsList = new Set()
 
-      const animalsByLot = await this.lotsService.findOne(id)
+      allLots.forEach(lot => {
+        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
+      })
 
-      if (!animalsByLot) {
-        return {
-          message: 'No lot register matches this id'
-        }
-      } else {
-        return animalsByLot['animals']
-      }
+      return AnimalsList.size
+
     } catch (error: any) {
       return {
-        message: 'Invalid lot_Id',
+        message: 'Invalid farm_Id',
         error
       }
     }
   }
 
-  /*async findAnimalsLotQuantity(farm_id: string) {
-    try {      
-      const allLots = await this.lotsService.findLotsByFarm(farm_id)
-      console.log(allLots)
+  async findNoLotsAnimals(farm_id: string) {
+    try {
 
-     
+      const farmAnimals: any[] = await this.findByFarmSpecial(farm_id)
+      const lotsAnimals: any[] = await this.lotsService.findLotsByFarmEspecial(farm_id)
 
-      const AnimalsList = new Set<string[]>()
-      allLots.forEach(lot => {
-        lot.animals.forEach(animal => AnimalsList.add(animal.toString()))
-      })  
-      console.log(AnimalsList.size, 'animal')
-      return AnimalsList.size 
+      const inNoLots = new Set<string>();
 
+      farmAnimals.forEach((animal) => {
+        const idAnimal = animal._id;
 
+        lotsAnimals.forEach((lot) => {
+          const lotAnimals = lot.animals;
+
+          if (!lotAnimals.includes(idAnimal)) {
+            inNoLots.add(idAnimal)
+          }
+        })
+      })
+      return inNoLots.size
     } catch (error: any) {
-      return error
+      return {
+        message: 'Invalid farm_Id',
+        error
+      }
     }
-  }*/
+  }
 
-
+  
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) {
     try {
@@ -207,5 +232,10 @@ export class AnimalsService {
         error
       }
     }
+  }
+
+  calculateAge(birthdate: Date): string {
+    const today = new Date();
+    return differenceInYears(today, birthdate).toString();
   }
 }

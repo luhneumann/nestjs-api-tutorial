@@ -1,6 +1,9 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { CreateAnimalDto } from "./create-animal.dto";
 import { User } from "src/user/entities/user.entities";
+import { IsEnum } from "class-validator";
+import { GenderEnum } from "../entities/animal.entity";
+import { Transform } from "class-transformer";
 
 export class ListAnimalDto extends PartialType(CreateAnimalDto) {
     @ApiProperty({
@@ -15,4 +18,12 @@ export class ListAnimalDto extends PartialType(CreateAnimalDto) {
         }     
     })
     user: User
+
+    @Transform((gender) => gender.value.toLowerCase())
+    @IsEnum(GenderEnum)
+    @ApiProperty({type: String, enum: GenderEnum, required: false})
+    gender: GenderEnum 
+
+    @ApiProperty({ type: String, required: false, example: '1' })
+    age: string;
 }
