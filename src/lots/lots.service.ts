@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Lot } from './entities/lot.entity';
 import { Aggregate, Model } from 'mongoose';
 import { WeightControl } from 'src/weight-control/entities/weight-control.entity';
+import path from 'path';
 
 
 @Injectable()
@@ -100,15 +101,18 @@ export class LotsService {
 
   async joinLotAndWeight(id: string){
     try {     
-      const lot = await this.LotsModel.aggregate([         
+      const lot = await this.LotsModel.aggregate([    
+        { $unwind: { path: '$animals' }},         
         { $lookup: 
           {   
-            from: "weightcontrols",
+            from: "weightcontrols",            
             localField: "animals",
             foreignField: "animal",
             as: "weight_control"
           },          
-        },        
+        }       
+        /*{ $group: { _id: { $dateToString: { date: "$weight_control.date" }}}},*/           
+               
       ])
       const byLotIdFilter = lot.filter((lot) => lot._id == id)
       return byLotIdFilter

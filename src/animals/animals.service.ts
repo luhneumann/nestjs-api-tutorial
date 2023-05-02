@@ -110,23 +110,15 @@ export class AnimalsService {
   async findFarmAnimalQuantity(farm_id: string) {
     try {
 
-      const allAnimalsByFarm = await this.findByFarmSpecial(farm_id)
-<<<<<<< HEAD
-      const animals = new Set()
-      
-      allAnimalsByFarm.forEach(animal => {animal._id.forEach(_id)} )
-      const animalsInNoLots = await this.lotsService.findAnimalsOnLots(farm_id)
-      console.log(allAnimalsByFarm)
-      console.log(animalsInNoLots)
-      
-=======
+      const allAnimalsByFarm = await this.findByFarmSpecial(farm_id)               
+
       const farmAnimalsQuantity = new Set()
 
       allAnimalsByFarm.forEach(animal => { farmAnimalsQuantity.add(animal) })
 
       return farmAnimalsQuantity.size
 
->>>>>>> 863d1f230e358bcbe16a79d408508e72b652693f
+
     } catch (error: any) {
       return {
         message: 'Invalid farm_Id',
